@@ -1,8 +1,8 @@
 # User documentation {#mainpage}
 
-## About Super4PCS
+## About OpenGR
 
-The Super4PCS library is a set C++ libraries, standalone applications and plugins released under the terms of the *APACHE V2 licence*, which makes it free for commercial and research use.
+OpenGR is a set C++ libraries for 3D Global Registration, standalone applications and plugins released under the terms of the *APACHE V2 licence*, which makes it free for commercial and research use.
 
 It provides state of the art global registration techniques for 3d pointclouds. Still under active development, the library is currently improved by adding wrappers to existing software, and by stabilizing the API.
 
@@ -28,11 +28,13 @@ In a nutshell, it provides:
  - @subpage roadmap
 
 ## Compilation status
-[stsimg-linux]: https://api.travis-ci.org/nmellado/Super4PCS.svg?branch=master
-[stsimg-windw]: https://ci.appveyor.com/api/projects/status/reg4cmhn309w1s8k/branch/master?svg=true
+[stsimg-linux]: https://api.travis-ci.org/STORM-IRIT/OpenGR.svg?branch=master
+[stsimg-windw]: https://ci.appveyor.com/api/projects/status/wpilmlfk8obuod8b/branch/master?svg=true
 
-[Travis]: https://travis-ci.org/nmellado/Super4PCS "Travis"
-[AppVeyor]: https://ci.appveyor.com/project/nmellado/super4pcs "AppVeyor"
+
+
+[Travis]: https://travis-ci.org/STORM-IRIT/OpenGR "Travis"
+[AppVeyor]: https://ci.appveyor.com/project/nmellado/opengr/ "AppVeyor"
 
 | Linux  \& MacOS | Windows         |
 | :----:          | :-----:         |
@@ -52,10 +54,10 @@ In a nutshell, it provides:
 
 ### Citation
 ```
-﻿@misc {Super4PCSLibrary,
+﻿@misc {OpenGR,
     author = {Mellado, Nicolas and Aiger, Dror and Mitra, Niloy J.},
-    title = {Super 4PCS Library},
-    howpublished = {https://github.com/nmellado/Super4PCS},
-    year = {2017},
+    title = {OpenGR: a 3D Global Registration Library},
+    howpublished = {https://github.com/STORM-IRIT/OpenGR},
+    year = {2018},
 }
 ```

@@ -156,23 +156,33 @@ if(DOXYGEN_FOUND)
     set (OpenGR_DOC_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc)
     file (GLOB_RECURSE OpenGR_MD_FILES ${CMAKE_CURRENT_SOURCE_DIR}/doc/*.md)
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in ${OpenGR_DOC_DIRECTORY}/Doxyfile @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/dox/Doxyfile.in ${OpenGR_DOC_DIRECTORY}/Doxyfile @ONLY)
+
+    ### Doxygen bootstrap
+    file(MAKE_DIRECTORY ${OpenGR_DOC_DIRECTORY}/)
+    file(MAKE_DIRECTORY ${OpenGR_DOC_DIRECTORY}/html/)
+    file ( DOWNLOAD https://raw.githubusercontent.com/Velron/doxygen-bootstrapped/master/customdoxygen.css
+           ${OpenGR_DOC_DIRECTORY}/html/customdoxygen.css SHOW_PROGRESS)
+    file ( DOWNLOAD https://raw.githubusercontent.com/Velron/doxygen-bootstrapped/master/doxy-boot.js
+           ${OpenGR_DOC_DIRECTORY}/html/doxy-boot.js SHOW_PROGRESS)
 
     add_custom_target(doc
-        ${CMAKE_COMMAND} -E make_directory ${OpenGR_DOC_DIRECTORY}
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/doc/img/
         ${OpenGR_DOC_DIRECTORY}/html/img
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/doc/dox/html/
+        ${OpenGR_DOC_DIRECTORY}/html/
         COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
         ${OpenGR_DOC_DIRECTORY}/
         COMMAND ${DOXYGEN_EXECUTABLE} ${OpenGR_DOC_DIRECTORY}/Doxyfile
         DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/doc/dox/Doxyfile.in
         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
         ${OpenGR_MD_FILES}
         SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/doc/dox/Doxyfile.in
         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
         ${OpenGR_MD_FILES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
