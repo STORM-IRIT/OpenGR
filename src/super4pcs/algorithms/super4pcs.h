@@ -107,8 +107,8 @@ protected:
   /// @param [in] distance_threshold1 The distance for verification.
   /// @param [in] distance_threshold2 The distance for matching middle points due
   /// to the invariants (See the paper for e1, e2).
-  /// @param [in] P_pairs The first set of pairs.
-  /// @param [in] Q_pairs The second set of pairs.
+  /// @param [in] First_pairs The first set of pairs found in Q.
+  /// @param [in] Second_pairs The second set of pairs found in Q.
   /// @param [out] quadrilaterals The set of congruent quadrilateral. In fact,
   /// it's a super set from which we extract the real congruent set.
   bool FindCongruentQuadrilaterals(
@@ -116,8 +116,8 @@ protected:
           Scalar invariant2,
           Scalar distance_threshold1,
           Scalar distance_threshold2,
-          const PairsVector& P_pairs,
-          const PairsVector& Q_pairs,
+          const PairsVector& First_pairs,
+          const PairsVector& Second_pairs,
           std::vector<Quadrilateral>* quadrilaterals) const override;
 
   /// Initializes the data structures and needed values before the match

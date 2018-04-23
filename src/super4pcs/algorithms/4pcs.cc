@@ -64,44 +64,44 @@ bool Match4PCS::FindCongruentQuadrilaterals(
         Scalar invariant2,
         Scalar /*distance_threshold1*/,
         Scalar distance_threshold2,
-        const std::vector<std::pair<int, int>>& P_pairs,
-        const std::vector<std::pair<int, int>>& Q_pairs,
+        const std::vector<std::pair<int, int>>& First_pairs,
+        const std::vector<std::pair<int, int>>& Second_pairs,
         std::vector<GlobalRegistration::Quadrilateral>* quadrilaterals) const {
   using RangeQuery = GlobalRegistration::KdTree<Scalar>::RangeQuery<>;
 
   if (quadrilaterals == nullptr) return false;
 
-  size_t number_of_points = 2 * P_pairs.size();
+  size_t number_of_points = 2 * First_pairs.size();
 
   // We need a temporary kdtree to store the new points corresponding to
-  // invariants in the P_pairs and then query them (for range search) for all
-  // the new points corresponding to the invariants in Q_pairs.
+  // invariants in the First_pairs and then query them (for range search) for all
+  // the new points corresponding to the invariants in Second_pairs.
   quadrilaterals->clear();
 
   GlobalRegistration::KdTree<Scalar> kdtree (number_of_points);
 
-  // Build the kdtree tree using the invariants on P_pairs.
-  for (size_t i = 0; i < P_pairs.size(); ++i) {
-    const VectorType& p1 = sampled_Q_3D_[P_pairs[i].first].pos();
-    const VectorType& p2 = sampled_Q_3D_[P_pairs[i].second].pos();
+  // Build the kdtree tree using the invariants on First_pairs.
+  for (size_t i = 0; i < First_pairs.size(); ++i) {
+    const VectorType& p1 = sampled_Q_3D_[First_pairs[i].first].pos();
+    const VectorType& p2 = sampled_Q_3D_[First_pairs[i].second].pos();
     kdtree.add(p1 + invariant1 * (p2-p1));
   }
   kdtree.finalize();
 
     //Point3D invRes;
   // Query the Kdtree for all the points corresponding to the invariants in Q_pair.
-  for (size_t i = 0; i < Q_pairs.size(); ++i) {
-    const VectorType& p1 = sampled_Q_3D_[Q_pairs[i].first].pos();
-    const VectorType& p2 = sampled_Q_3D_[Q_pairs[i].second].pos();
+  for (size_t i = 0; i < Second_pairs.size(); ++i) {
+    const VectorType& p1 = sampled_Q_3D_[Second_pairs[i].first].pos();
+    const VectorType& p2 = sampled_Q_3D_[Second_pairs[i].second].pos();
 
     RangeQuery query;
     query.queryPoint = p1 + invariant2 * (p2 - p1);
     query.sqdist     = distance_threshold2;
 
     kdtree.doQueryDistProcessIndices(query,
-        [quadrilaterals, i, &P_pairs, &Q_pairs](int id){
-        quadrilaterals->emplace_back(P_pairs[id/2].first, P_pairs[id/2].second,
-                                     Q_pairs[i].first, Q_pairs[i].second);
+        [quadrilaterals, i, &First_pairs, &Second_pairs](int id){
+        quadrilaterals->emplace_back(First_pairs[id/2].first, First_pairs[id/2].second,
+                                     Second_pairs[i].first, Second_pairs[i].second);
     });
   }
 
@@ -109,7 +109,7 @@ bool Match4PCS::FindCongruentQuadrilaterals(
 }
 
 // Constructs two sets of pairs in Q, each corresponds to one pair in the base
-// in P, by having the same distance (up to some tolerantz) and optionally the
+// in P, by having the same distance (up to some tolerant) and optionally the
 // same angle between normals and same color.
 void
 Match4PCS::ExtractPairs(Scalar pair_distance,
@@ -136,11 +136,12 @@ Match4PCS::ExtractPairs(Scalar pair_distance,
       // wrong orientation. We want to verify that the angle between the
       // normals is close to the angle between normals in the base. This can be
       // checked independent of the full rotation angles which are not yet
-      // defined by segment matching alone..
+      // defined by segment matching alone.
       const Scalar distance = (q.pos() - p.pos()).norm();
 #ifndef MULTISCALE
       if (std::abs(distance - pair_distance) > pair_distance_epsilon) continue;
 #endif
+
 
       if ( options_.max_normal_difference > 0 &&
               q.normal().squaredNorm() > 0 &&

@@ -435,7 +435,7 @@ bool Match4PCSBase::TryCongruentSet(
 
       if (ok && rms >= Scalar(0.)) {
 
-        // We give more tolerantz in computing the best rigid transformation.
+        // We give more tolerant in computing the best rigid transformation.
         if (rms < distance_factor * options_.delta) {
 
           nbCongruentAto++;

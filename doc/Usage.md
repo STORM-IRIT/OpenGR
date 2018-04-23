@@ -6,7 +6,7 @@ We also list and describe difficult configurations that may arise sometime, how 
 Specific cases are described in dedicated pages:
  - @subpage usage-partinwhole
 
-To get the exhaustive list of Super4PCS parameters, run
+To get the exhaustive list of Super4PCS parameters, you can run the executable found in `build/bin/` directory making
 
     ./Super4PCS -h
 
@@ -82,7 +82,7 @@ The LCP values are given in the standard output:
         norm_max_dist: 0.010000
         Initial LCP: 0.004831
         Score: 0.748792
-with 0.4% points lying in the shell at the beginning of the process, and 74.8% at the end.
+with 0.4% points lying in the shell at the beginning of the process, and 74.8% at the end. (If you want to test the exemple, make sure that you are in `build/install/scripts` directory before running the exemple.sh)
 
 Using too wide values will slow down the algorithm by increasing the size of the congruent set, while using to small values prevents to find a solution.
 This parameter impacts other steps of the algorithm, see the paper for more details.

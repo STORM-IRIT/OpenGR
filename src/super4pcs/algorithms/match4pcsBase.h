@@ -75,7 +75,6 @@ public:
         constexpr bool needsGlobalTransformation() const { return false; }
     };
     using DefaultSampler = Sampling::UniformDistSampler;
-
     static constexpr int kNumberOfDiameterTrials = 1000;
     static constexpr Scalar kLargeNumber = 1e9;
     static constexpr Scalar distance_factor = 2.0;
@@ -313,19 +312,19 @@ protected:
     /// @param [in] distance_threshold1 The distance for verification.
     /// @param [in] distance_threshold2 The distance for matching middle points due
     /// to the invariants (See the paper for e1, e2).
-    /// @param [in] P_pairs The first set of pairs.
-    /// @param [in] Q_pairs The second set of pairs.
+    /// @param [in] First_pairs The first set of pairs found in Q.
+    /// @param [in] Second_pairs The second set of pairs found in Q.
     /// @param [out] quadrilaterals The set of congruent quadrilateral. In fact,
     /// it's a super set from which we extract the real congruent set.
     virtual bool
     FindCongruentQuadrilaterals(Scalar invariant1, Scalar invariant2,
                                 Scalar distance_threshold1,
                                 Scalar distance_threshold2,
-                                const PairsVector& P_pairs,
-                                const PairsVector& Q_pairs,
+                                const PairsVector& First_pairs,
+                                const PairsVector& Second_pairs,
                                 std::vector<Quadrilateral>* quadrilaterals) const = 0;
 
-    /// Loop over the set of congruent 4-points and test compatiliby with the
+    /// Loop over the set of congruent 4-points and test the compatibility with the
     /// input base.
     /// \param [out] Nb Number of quads corresponding to valid configurations
     template <typename Visitor>
