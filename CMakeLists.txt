@@ -105,6 +105,21 @@ endif( NOT EIGEN3_INCLUDE_DIR )
 include_directories(${EIGEN3_INCLUDE_DIR})
 message(STATUS "Eigen3 root path: ${EIGEN3_INCLUDE_DIR}")
 
+## Eigen: automatic configuration:
+##  1. if EIGEN3_INCLUDE_DIR is set, use it directly
+##  2. if any, and version >= 3.3.x, use system version
+##  3. otherwise, download (if required) and use submodule
+if( NOT STB_INCLUDE_DIR )
+    set(STB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/stb")
+
+    if( NOT EXISTS ${STB_INCLUDE_DIR}/stb.h )
+        execute_process(COMMAND git submodule update --init -- ${STB_INCLUDE_DIR}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    endif( NOT EXISTS ${STB_INCLUDE_DIR}/stb.h )
+endif( NOT STB_INCLUDE_DIR )
+include_directories(${STB_INCLUDE_DIR})
+message(STATUS "STB root path: ${STB_INCLUDE_DIR}")
+
 ################################################################################
 ## OPENGR algo
 ################################################################################

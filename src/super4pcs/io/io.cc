@@ -3,6 +3,10 @@
 
 #include <Eigen/Geometry>
 
+#define STBI_FAILURE_USERMSG
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #ifdef USE_OPENCV
     #include <opencv2/core/core.hpp>
     #include <opencv2/highgui/highgui.hpp>
@@ -257,6 +261,42 @@ IOManager::ReadObj(const char *filename,
                   << img_name.c_str()
                   << std::endl;
 #endif
+
+        // ... x = width, y = height, n = # 8-bit components per pixel ...
+        //     N=#comp     components
+        //       1           grey
+        //       2           grey, alpha
+        //       3           red, green, blue
+        //       4           red, green, blue, alpha
+        int width,height,n;
+        unsigned char *data = stbi_load(filename, &width, &height, &n, 3);
+
+        if (data != nullptr) {
+            for (int i = 0; i < tris.size(); ++i) {
+              const tripple &t = tris[i];
+              Eigen::Matrix2f tc1 = tex_coords[t.t1 - 1];
+              Eigen::Matrix2f tc2 = tex_coords[t.t2 - 1];
+              Eigen::Matrix2f tc3 = tex_coords[t.t3 - 1];
+              if ((tc1.array() < 1.0 && tc1.array() > 1.0 ).all() &&
+                  (tc2.array() < 1.0 && tc2.array() > 1.0 ).all() &&
+                  (tc3.array() < 1.0 && tc3.array() > 1.0 ).all()) {
+              }
+              auto setcolor = [data, width, height](Point3D& p, float u, float v) {
+                  using Scalar = typename Point3D::Scalar;
+                  unsigned int *ptr = (unsigned int*) (data + int(v * height * width +  u * width));
+                  p.set_rgb(Eigen::Map<Eigen::Matrix<unsigned int, 3, 1>>(ptr).cast<Scalar>());
+              };
+
+              setcolor( v[t.a - 1], tc1.coeffRef(0), tc1.coeffRef(1) );
+              setcolor( v[t.b - 1], tc2.coeffRef(0), tc2.coeffRef(1) );
+              setcolor( v[t.c - 1], tc3.coeffRef(0), tc3.coeffRef(1) );
+            }
+            stbi_image_free(data);
+        } else {
+            std::cerr << "Image loading failed: "
+                      << stbi_failure_reason()
+                      << std::endl;
+        }
       }
     }
   }
