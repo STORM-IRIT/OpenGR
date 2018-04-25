@@ -266,7 +266,7 @@ public:
      * \param currentId Index of the querypoint if it belongs to the tree
      */
     template<int stackSize>
-    inline Index
+    inline std::pair<Index, Scalar>
     doQueryRestrictedClosestIndex(RangeQuery<stackSize> &query,
                                   int currentId = -1) const;
 
@@ -387,7 +387,7 @@ KdTree<Scalar, Index>::~KdTree()
 */
 template<typename Scalar, typename Index>
 template<int stackSize>
-Index
+std::pair<Index, Scalar>
 KdTree<Scalar, Index>::doQueryRestrictedClosestIndex(
         RangeQuery<stackSize>& query,
         int currentId) const
@@ -449,11 +449,11 @@ KdTree<Scalar, Index>::doQueryRestrictedClosestIndex(
             --count;
         }
     }
-    return cl_id;
+    return std::make_pair(cl_id, cl_dist);
 }
 
 /*!
-  \see doQueryRestrictedClosest For more information about the algorithm.
+  \see doQueryRestrictedClosestIndex For more information about the algorithm.
 
   This function is an alternative to doQueryDist(const VectorType& queryPoint)
   that allow to perform the query by requesting a maximum distance instead of
