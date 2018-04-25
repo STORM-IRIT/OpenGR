@@ -7,9 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#ifdef USE_OPENCV
-    #include <opencv2/core/core.hpp>
-    #include <opencv2/highgui/highgui.hpp>
+#ifdef USE_BOOST
+#include <boost/filesystem.hpp>
 #endif
 
 #define LINE_BUF_SIZE 100
@@ -148,6 +147,14 @@ IOManager::ReadObj(const char *filename,
                    vector<typename Point3D::VectorType> &normals,
                    vector<tripple> &tris,
                    vector<std::string> &mtls) {
+
+#ifdef USE_BOOST
+    using namespace boost;
+    const string workingDir = filesystem::path(filename).parent_path().native()
+            + filesystem::path::preferred_separator;
+#endif
+
+
   fstream f(filename, ios::in);
   if (!f || f.fail()) return false;
   char str[1024];
@@ -195,7 +202,11 @@ IOManager::ReadObj(const char *filename,
         v[triangle.c - 1].set_normal(normals[triangle.n3 - 1]);
       }
     } else if (strcmp(ch, "mtllib") == 0) {
-      mtls.push_back(str + 7);
+#ifdef USE_BOOST
+        mtls.push_back(workingDir + std::string (str + 7));
+#else
+        std::cerr << "Skipping MTL (Boost disabled)" << std::endl;
+#endif
     }
   }
   f.close();
@@ -220,6 +231,7 @@ IOManager::ReadObj(const char *filename,
   }
 
 
+#ifdef USE_BOOST
   if (mtls.size()) {
     f.open(mtls[0].c_str(), ios::in);
     while (f && !f.fail()) {
@@ -227,49 +239,10 @@ IOManager::ReadObj(const char *filename,
       f >> dummy;
       if (strcmp(dummy.c_str(), "map_Kd") == 0) {
         f >> img_name;
-#ifdef USE_OPENCV
-        cv::Mat tex = cv::imread(img_name);
-        if (!tex.empty()) {
-          for (int i = 0; i < tris.size(); ++i) {
-            const tripple &t = tris[i];
-            Eigen::Matrix2f tc1 = tex_coords[t.t1 - 1];
-            Eigen::Matrix2f tc2 = tex_coords[t.t2 - 1];
-            Eigen::Matrix2f tc3 = tex_coords[t.t3 - 1];
-            if ((tc1.array() < 1.0 && tc1.array() > 1.0 ).all() &&
-                (tc2.array() < 1.0 && tc2.array() > 1.0 ).all() &&
-                (tc3.array() < 1.0 && tc3.array() > 1.0 ).all()) {
-
-              v[t.a - 1].set_rgb(typename Point3D::VectorType(
-                  tex.at<cv::Vec3b>(tc1.coeffRef(1) * tex.rows, tc1.coeffRef(0) * tex.cols)[0],
-                  tex.at<cv::Vec3b>(tc1.coeffRef(1) * tex.rows, tc1.coeffRef(0) * tex.cols)[1],
-                  tex.at<cv::Vec3b>(tc1.coeffRef(1) * tex.rows, tc1.coeffRef(0) * tex.cols)[2]));
-
-              v[t.b - 1].set_rgb(typename Point3D::VectorType(
-                  tex.at<cv::Vec3b>(tc2.coeffRef(1) * tex.rows, tc2.coeffRef(0) * tex.cols)[0],
-                  tex.at<cv::Vec3b>(tc2.coeffRef(1) * tex.rows, tc2.coeffRef(0) * tex.cols)[1],
-                  tex.at<cv::Vec3b>(tc2.coeffRef(1) * tex.rows, tc2.coeffRef(0) * tex.cols)[2]));
-
-              v[t.c - 1].set_rgb(typename Point3D::VectorType(
-                  tex.at<cv::Vec3b>(tc3.coeffRef(1) * tex.rows, tc3.coeffRef(0) * tex.cols)[0],
-                  tex.at<cv::Vec3b>(tc3.coeffRef(1) * tex.rows, tc3.coeffRef(0) * tex.cols)[1],
-                  tex.at<cv::Vec3b>(tc3.coeffRef(1) * tex.rows, tc3.coeffRef(0) * tex.cols)[2]));
-            }
-          }
-        }
-#else
-        std::cerr << "OpenCV is required to load material textures. Skipping "
-                  << img_name.c_str()
-                  << std::endl;
-#endif
 
         // ... x = width, y = height, n = # 8-bit components per pixel ...
-        //     N=#comp     components
-        //       1           grey
-        //       2           grey, alpha
-        //       3           red, green, blue
-        //       4           red, green, blue, alpha
         int width,height,n;
-        unsigned char *data = stbi_load(filename, &width, &height, &n, 3);
+        unsigned char *data = stbi_load((workingDir + img_name).c_str(), &width, &height, &n, STBI_rgb);
 
         if (data != nullptr) {
             for (int i = 0; i < tris.size(); ++i) {
@@ -283,8 +256,11 @@ IOManager::ReadObj(const char *filename,
               }
               auto setcolor = [data, width, height](Point3D& p, float u, float v) {
                   using Scalar = typename Point3D::Scalar;
-                  unsigned int *ptr = (unsigned int*) (data + int(v * height * width +  u * width));
-                  p.set_rgb(Eigen::Map<Eigen::Matrix<unsigned int, 3, 1>>(ptr).cast<Scalar>());
+                  unsigned char *ptr = (data + int(STBI_rgb) * int(v * height * width +  u * width));
+                  int r = ptr[0];
+                  int g = ptr[1];
+                  int b = ptr[2];
+                  p.set_rgb(Eigen::Matrix<int, 3, 1>(r,g,b).cast<Scalar>());
               };
 
               setcolor( v[t.a - 1], tc1.coeffRef(0), tc1.coeffRef(1) );
@@ -294,12 +270,14 @@ IOManager::ReadObj(const char *filename,
             stbi_image_free(data);
         } else {
             std::cerr << "Image loading failed: "
-                      << stbi_failure_reason()
+                      << stbi_failure_reason() << "\n"
+                      << "Path: " << workingDir + img_name
                       << std::endl;
         }
       }
     }
   }
+#endif
   f.close();
 
   if (v.size() == 0) return false;

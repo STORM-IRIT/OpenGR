@@ -25,11 +25,8 @@ Super4PCS takes care of its own dependencies, and downloads them when required. 
 The libraries and the standalone application require:
 * [Eigen](http://eigen.tuxfamily.org/). The library is automagically downloaded and configured by the cmake process. If you need to force using Eigen from a specific path, call CMAKE with `-DEIGEN3_INCLUDE_DIR=/path/to/eigen`.
 
-In order to load textures for 3d meshes, the IO module needs:
-* [OpenCV](http://opencv.org/): binaries can be downloaded from the [OpenCV github](https://github.com/opencv/opencv) or [OpenCV sourceForge] (https://sourceforge.net/projects/opencvlibrary/). If you use Linux, you can also download the OpenCV library using the terminal. Texture loading is disabled if OpenCV is not available. Point-clouds with colors are not affected.
-
-Tests:
-* [Boost-filesystem](http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/index.htm), used to read dataset folders. Tests can be disabled by calling CMAKE with `-DSUPER4PCS_BUILD_TEST=FALSE`. Required Boost version: 1.57 or more.
+IO and tests:
+* [Boost-filesystem](http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/index.htm), used to read dataset folders. Requires Boost version: 1.57 or more.
 
 ### CMake Options
 Our CMake scripts can be configured using the following options:
@@ -82,10 +79,7 @@ Super4PCS requires c++11 features and CMake support. We recommend to use Microso
 By default, the project can be opened and compiled straight away with no parameter setting.
 
 If you want to compile with OpenCV and/or Boost support, the dependency directories must be properly configured in Visual Studio.
-They can be set either when calling [CMake](https://blogs.msdn.microsoft.com/vcblog/2016/10/05/cmake-support-in-visual-studio/#configure-cmake) or globally by configuring Visual Studio (see how-to [here](https://social.msdn.microsoft.com/Forums/vstudio/en-US/a494abb8-3561-4ebe-9eb0-6f644a679862/visual-studio-2010-professional-how-to-add-include-directory-for-all-projects?forum=vcgeneral#7b5ab5f2-f793-4b0e-a18a-679948d12bdd)):
-* Include directories: `path-to-opencv\build\include`,
-* Library directories: `path-to-opencv\build\x64\vc14\lib`.
-
+They can be set either when calling [CMake](https://blogs.msdn.microsoft.com/vcblog/2016/10/05/cmake-support-in-visual-studio/#configure-cmake) or globally by configuring Visual Studio (see how-to [here](https://social.msdn.microsoft.com/Forums/vstudio/en-US/a494abb8-3561-4ebe-9eb0-6f644a679862/visual-studio-2010-professional-how-to-add-include-directory-for-all-projects?forum=vcgeneral#7b5ab5f2-f793-4b0e-a18a-679948d12bdd)).
 ![](img/VStudio-globalFolders.jpg)
 
 ***

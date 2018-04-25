@@ -7,7 +7,7 @@ project (OpenGR LANGUAGES CXX VERSION 1.1.3)
 # Set option to enable timing recording
 OPTION (OpenGR_COMPILE_TESTS "Enable testing" TRUE)
 OPTION (OpenGR_COMPILE_DEMOS "Compile demo applications (including the Super4PCS standalone)" TRUE)
-OPTION (IO_USE_OPENCV "Use OpenCV for texture loading" TRUE)
+OPTION (IO_USE_BOOST "Use boost::filesystem for texture loading" TRUE)
 OPTION (ENABLE_TIMING "Enable computation time recording" FALSE)
 OPTION (OpenGR_USE_CHEALPIX "Use Chealpix for orientation filtering (deprecated)" FALSE)
 OPTION (DL_DATASETS "Download demo datasets and associated run scripts" FALSE)
