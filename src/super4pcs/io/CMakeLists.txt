@@ -16,7 +16,7 @@ if(IO_USE_BOOST)
         target_link_libraries(opengr_io ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
     else ()
         message(STATUS "[Deps] Boost not found")
-    endif (OpenCV_FOUND)
+    endif (Boost_FOUND)
 endif(IO_USE_BOOST)
 
 set(targets_export_name "${PROJECT_NAME}Targets")
