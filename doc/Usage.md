@@ -6,7 +6,7 @@ We also list and describe difficult configurations that may arise sometime, how 
 Specific cases are described in dedicated pages:
  - @subpage usage-partinwhole
 
-To get the exhaustive list of Super4PCS parameters, you can run the executable found in `build/bin/` directory making
+To get the exhaustive list of Super4PCS parameters, run the executable found in `${CMAKE_INSTALL_PREFIX}/bin/` directory:
 
     ./Super4PCS -h
 
