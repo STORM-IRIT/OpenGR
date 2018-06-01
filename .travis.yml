@@ -3,6 +3,7 @@ language: cpp
 script:
   - make -j2 VERBOSE=1 && make install
   - if [ "$CHEALPIX" == "Off" ]; then  make buildtests && make test; fi
+  - if [ "$BUILD_DOC" == "On" ]; then  make doc; fi
 
 #cache:
 #  directories:
@@ -29,13 +30,13 @@ before_install:
 matrix:
   include:
     # mac clang Release
-    - env: BUILD_TYPE=Release BOOST=Off CHEALPIX=Off
+    - env: BUILD_TYPE=Release BOOST=Off CHEALPIX=Off BUILD_DOC=Off
       os: osx
       compiler: clang
 
 
     # clang 5.0 Release
-    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=Off CHEALPIX=Off
+    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=Off CHEALPIX=Off BUILD_DOC=Off
       os: linux
       addons: &clang50
         apt:
@@ -50,7 +51,7 @@ matrix:
 
 
     # gcc-7 Release
-    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=Off CHEALPIX=Off
+    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=Off CHEALPIX=Off BUILD_DOC=Off
       os: linux
       addons: &gcc7
         apt:
@@ -71,7 +72,7 @@ matrix:
 
 
     # clang 5.0 Release
-    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=On CHEALPIX=Off
+    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=On CHEALPIX=Off BUILD_DOC=Off
       os: linux
       addons: &clang50
         apt:
@@ -88,7 +89,7 @@ matrix:
 
 
     # gcc-7 Release
-    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=On CHEALPIX=Off
+    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=On CHEALPIX=Off BUILD_DOC=On
       os: linux
       addons: &gcc7
         apt:
@@ -97,6 +98,11 @@ matrix:
             - cmake3
             - libboost-filesystem-dev
             - libboost-system-dev
+            - doxygen
+            - doxygen-doc
+            - doxygen-latex
+            - doxygen-gui
+            - graphviz
           sources:
             - ubuntu-toolchain-r-test
 
@@ -110,7 +116,7 @@ matrix:
 
 
     # clang 5.0
-    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=On CHEALPIX=On
+    - env: CLANG_VERSION=5.0 BUILD_TYPE=Release BOOST=On CHEALPIX=On BUILD_DOC=Off
       os: linux
       addons: &clang50
         apt:
@@ -127,7 +133,7 @@ matrix:
 
 
     # gcc-7
-    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=On CHEALPIX=On
+    - env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=On CHEALPIX=On BUILD_DOC=Off
       os: linux
       addons: &gcc7
         apt:
@@ -155,6 +161,17 @@ install:
 branches:
   except:
   - gh-pages
+
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: $TRAVIS_BUILD_DIR/doc/html
+  github_token: $GITHUB_API_KEY
+  env: GCC_VERSION=7 BUILD_TYPE=Release BOOST=On CHEALPIX=Off BUILD_DOC=On
+  on:
+    branch: master
+
 
 ############################################################################
 # Artifacts creation
