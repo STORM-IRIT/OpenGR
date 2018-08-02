@@ -50,6 +50,7 @@ In a nutshell, it provides:
 ### Contributors
 * [Simone Gasparini](https://github.com/simogasp) Pull-Request reviews
 * [xinkang](https://github.com/xinkang) Fix include path of timer.h
+* [Kastan Day](https://github.com/kastanday) Added getFitnessScore() to PCL wrapper
 
 
 ### Citation

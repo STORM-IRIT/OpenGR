@@ -99,13 +99,18 @@ pcl::Super4PCS<PointSource, PointTarget>::computeTransformation (PointCloudSourc
   fillPointSet(*target_, set1);
   fillPointSet(*input_, set2);;
 
-  float score = matcher.ComputeTransformation(set1, &set2, final_transformation_, sampler, visitor);
+  fitness_score_ = matcher.ComputeTransformation(set1, &set2, final_transformation_, sampler, visitor);
 
   transformPointCloud (*input_, output, final_transformation_);
 
-  pcl::console::print_highlight ("Final score: %f\n", score);
+  pcl::console::print_highlight ("Final score: %f\n", fitness_score_);
 
   converged_ = true;
+}
+
+float getFitnessScore() const
+{
+    return fitness_score_;
 }
 
 

@@ -99,7 +99,14 @@ namespace pcl
       {
       }
 
+      /** \brief Get the fitness score of alignment. Range from 0-1, higher is better.
+       */
+      float
+      getFitnessScore() const;
+
     protected:
+
+      float fitness_score_;
 
       /** \brief Rigid transformation computation method.
         * \param output the transformed input point cloud dataset using the rigid transformation found
@@ -107,6 +114,7 @@ namespace pcl
         */
       void
       computeTransformation (PointCloudSource &output, const Eigen::Matrix4f& guess);
+
   };
 }
 
