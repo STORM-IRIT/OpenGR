@@ -1,4 +1,5 @@
 language: cpp
+dist: xenial
 
 script:
   - make -j2 VERBOSE=1 && make install
@@ -44,10 +45,10 @@ matrix:
             - util-linux
             - clang-5.0
             - g++-7
-            - cmake3
+            - cmake
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
 
     # gcc-7 Release
@@ -57,7 +58,7 @@ matrix:
         apt:
           packages:
             - g++-7
-            - cmake3
+            - cmake
           sources:
             - ubuntu-toolchain-r-test
 
@@ -80,12 +81,12 @@ matrix:
             - util-linux
             - clang-5.0
             - g++-7
-            - cmake3
+            - cmake
             - libboost-filesystem-dev
             - libboost-system-dev
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
 
     # gcc-7 Release
@@ -95,13 +96,10 @@ matrix:
         apt:
           packages:
             - g++-7
-            - cmake3
+            - cmake
             - libboost-filesystem-dev
             - libboost-system-dev
             - doxygen
-            - doxygen-doc
-            - doxygen-latex
-            - doxygen-gui
             - graphviz
           sources:
             - ubuntu-toolchain-r-test
@@ -124,12 +122,12 @@ matrix:
             - util-linux
             - clang-5.0
             - g++-7
-            - cmake3
+            - cmake
             - libboost-filesystem-dev
             - libboost-system-dev
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
 
 
     # gcc-7
@@ -139,7 +137,7 @@ matrix:
         apt:
           packages:
             - g++-7
-            - cmake3
+            - cmake
             - libboost-filesystem-dev
             - libboost-system-dev
           sources:
