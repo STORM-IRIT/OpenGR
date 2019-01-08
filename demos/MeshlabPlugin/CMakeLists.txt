@@ -3,7 +3,7 @@ project(Meshlab-GlobalRegistrationPlugin)
 find_package(Meshlab QUIET)
 
 if(MESHLAB_FOUND)
-    message(STATUS "Preparing Meshlab plugin")
+    message(STATUS "[Demos] Meshlab found, creating target Meshlab-GlobalRegistrationPlugin")
 
     set(PLUGIN_NAME "filter_globalregistration")
     set(PLUGIN_SRC_DIR              "${CMAKE_CURRENT_SOURCE_DIR}/${PLUGIN_NAME}")
@@ -32,8 +32,6 @@ if(MESHLAB_FOUND)
     add_custom_target(Meshlab_install_plugin
        COMMENT "Performing Meshlab plugin installation (manual compilation is still required. See ${PLUGIN_INSTALL_DIR}/readme.md)"
        DEPENDS internal_install_opengr_to_meshlab_externals internal_install_meshlab_plugin_source)
-else()
-     message(WARNING "Skipping Meshlab plugin preparation - Meshlab not found")
 endif(MESHLAB_FOUND)
 
 
