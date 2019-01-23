@@ -73,8 +73,8 @@ echo "Running 4PCS"
 time -p ../bin/Super4PCS -i ../assets/hippo1.obj ../assets/hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200 -r      4pcs_fast.obj -m      mat_4pcs_fast.txt -x
 
 
-if [ -f ../bin/Super4PCS-PCLWrapper ]; then
+if [ -f ../bin/OpenGR-PCLWrapper ]; then
     echo ${SPACER}
     echo "Running PCLWrapper"
-    ../bin/Super4PCS-PCLWrapper ../assets/hippo1.obj ../assets/hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200
+    ../bin/OpenGR-PCLWrapper ../assets/hippo1.obj ../assets/hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200
 fi

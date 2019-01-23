@@ -62,8 +62,8 @@
 ..\bin\Super4pcs -i ..\assets\hippo1.obj ..\assets\hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200 -r super4pcs_fast.obj -m mat_super4pcs_fast.txt
 ..\bin\Super4pcs -i ..\assets\hippo1.obj ..\assets\hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200 -r      4pcs_fast.obj -m      mat_4pcs_fast.txt -x
 
-if exist ..\bin\Super4PCS-PCLWrapper (
-    ..\bin\Super4PCS-PCLWrapper ..\assets\hippo1.obj ..\assets\hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200
+if exist ..\bin\OpenGR-PCLWrapper (
+    ..\bin\OpenGR-PCLWrapper ..\assets\hippo1.obj ..\assets\hippo2.obj -o 0.7 -d 0.01 -t 1000 -n 200
 )
 
 @ PAUSE
