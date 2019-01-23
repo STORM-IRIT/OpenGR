@@ -47,11 +47,14 @@ main (int argc, char **argv)
     return (-1);
   }
 
-  // Load Super4pcs parameters
-  Demo::getArgs(argc, argv);
+  if(int c = Demo::getArgs(argc, argv) != 0)
+    {
+      Demo::printUsage(argc, argv);
+      exit(std::max(c,0));
+    }
 
   pcl::Super4PCS<PointNT,PointNT> align;
-//  Demo::setOptionsFromArgs(align.options_);
+  Demo::setOptionsFromArgs(align.options_);
 
   // Downsample
 //  pcl::console::print_highlight ("Downsampling...\n");
