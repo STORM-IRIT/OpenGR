@@ -2,7 +2,7 @@ language: cpp
 dist: xenial
 
 script:
-  - make -j2 VERBOSE=1 && make install
+  - make all -j2 VERBOSE=1 && make install
   - if [ "$CHEALPIX" == "Off" ]; then  make buildtests && make test; fi
   - if [ "$BUILD_DOC" == "On" ]; then  make doc; fi
 
