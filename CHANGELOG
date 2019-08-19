@@ -1,3 +1,23 @@
+Super4PCS-v1.2.0
+======================
+### Purpose of this release
+This new release does not include new functionalities on the client side, but rather very important evolutions of the API for improved interoperability with other libraries.
+We introduce the Point-Type Abstraction layer developed by Necip Fazil Yildiran as part of the Google Summer of Code 2019.
+This new version of the API simplify the interoperability with other libraries, by avoiding to copy input samples prior registration.
+With this new version comes a wrapper for CGAL, which allow to process CGAL point-clouds and perform local registration using libPointMatcher (see PR here: https://github.com/CGAL/cgal/pull/4153).
+
+Another important fix is to defer the management of the dependencies to cmake instead of git, which allow to build from source even without using git, which happens when downloading the code source zip file from github.
+
+### Changelog
+ - Interoperability
+    - Add Point-Type Abstraction Layer
+    - Remove Meshlab demo: Meshlab is not maintened anymore, and the plugin was too complex to use, test, and probably not really used in practice
+ - Continuous Integration
+    - Call `make all` in Travis script
+ - Other fixes and improvements
+    - Partially fix #36: do not process GIT_CHANGESET when it does not exists (https://github.com/STORM-IRIT/OpenGR/issues/36)
+    - Fix #34 https://github.com/STORM-IRIT/OpenGR/issues/34
+
 Super4PCS-V1.1.2
 ======================
 ### Purpose of this release
@@ -12,13 +32,13 @@ Stabilizing building process and source code, and improve compatibility with mod
     - Update CMake minimal version to 3.3 aa21804df523554f66bcbcee8ba8d248aedba584
  - API
     - Refactor main namespace name as `GlobalRegistration` 036972d4ea7f5c304f6a04c690dfd789b920c656 ba79cae738e8bac8e412971c5875e316fbc558e8
-    - Clean `match4pcsBase` API: keep only `ComputeTransformation` as public method (+ getters), and mark other internal methods as protected. 
+    - Clean `match4pcsBase` API: keep only `ComputeTransformation` as public method (+ getters), and mark other internal methods as protected.
 Consequence of this change: the test applications will have to create local classes inheriting from `match4pcsBase` to allow access to these internal routines.  db3d7a06f48900f96a9af9a9fd657993fbe38806
  - Continuous Integration
     - Update Travis script to cope for new cmake minimal version aa21804df523554f66bcbcee8ba8d248aedba584 f9b654dfd294259b9837628d2286f72660c70a9b 43b23f6ff29d6112dc7afc9bd1e7e5775063cb9c f185cfcc48d8eba5183944779449225c493d6e0d 57aa88896510c257846b434db09c26f37a58f07a 4b78a1798113d2f02a16994610bb8ba59226ab2d
     - Add new test compiling and running an external application and linking against the Super4PCS library 75671cefddf2b4535cbb1f998a3080090bfaf1f2
     - [windows] Enable testing (release only, due to bad performances in debug -> hitting timeout)
-    - [windows] Remove support for 32 bits builds 
+    - [windows] Remove support for 32 bits builds
  - Other fixes and improvements
     - Remove compilation warnings in IO module (not that this module is not safer than before, but just quiet) 93e9fbf0ea6b5976fbf24487480725614e708ebd c8ad84e0460e0fc8efe8a98b169118590c8fd662
     - Fix remaining logging commands not using the logging system 61b0fa229b65afee6ef586db6b4be326e8d0ca7d
@@ -28,8 +48,8 @@ Consequence of this change: the test applications will have to create local clas
 Super4PCS-V1.1.1
 ======================
 Minor release update including:
- - fixes in the deployment system and 
- - fix a compilation error when enabling timings, authored by @xinkang 
+ - fixes in the deployment system and
+ - fix a compilation error when enabling timings, authored by @xinkang
 
 Super4PCS-V1.1.0
 ======================

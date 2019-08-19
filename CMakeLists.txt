@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.3)
-project (OpenGR LANGUAGES CXX VERSION 1.1.3)
+project (OpenGR LANGUAGES CXX VERSION 1.2.0)
 
 ################################################################################
 ## User options
@@ -201,7 +201,7 @@ if(DOXYGEN_FOUND)
         ${OpenGR_DOC_DIRECTORY}/html/
         COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG
-        ${OpenGR_DOC_DIRECTORY}/
+        ${OpenGR_DOC_DIRECTORY}/html/
         COMMAND ${DOXYGEN_EXECUTABLE} ${OpenGR_DOC_DIRECTORY}/Doxyfile
         DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/doc/dox/Doxyfile.in

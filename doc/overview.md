@@ -46,7 +46,7 @@ In a nutshell, it provides:
 
 
 ## Credits
-* Nicolas Mellado: conception, implementation and examples
+* Nicolas Mellado: main developper, conception, implementation and examples
 * Dror Aiger: 4pcs implementation
 * Niloy Mitra: 4pcs implementation
 
@@ -56,11 +56,13 @@ In a nutshell, it provides:
 * [Kastan Day](https://github.com/kastanday) Added getFitnessScore() to PCL wrapper
 * [Necip Fazil Yildiran](https://github.com/necipfazil) Range and point type abstraction layer
 
+We also wish to thanks Simon Giraudot and https://geometryfactory.com/ for their support and help through our participation to the 2019 Google Summer of Code: https://summerofcode.withgoogle.com/projects/#6321265885839360.
+
 
 ### Citation
 ```
 ﻿@misc {OpenGR,
-    author = {Mellado, Nicolas and Aiger, Dror and Mitra, Niloy J.},
+    author = {Mellado, Nicolas.},
     title = {OpenGR: a 3D Global Registration Library},
     howpublished = {https://github.com/STORM-IRIT/OpenGR},
     year = {2018},

@@ -1,4 +1,17 @@
 # Release Notes {#currentrelease}
+See complete changelog here: [CHANGELOG](./CHANGELOG)
+## V1.2.x
+This release improve usability and interoperability of OpenGR with other libraries and projects.
+
+ - Interoperability
+   - Add Point-Type Abstraction Layer, see documentation: @subpage using-your-point-type
+   - Remove Meshlab demo: Meshlab is not maintened anymore, and the plugin was too complex to use, test, and probably not really used in practice
+ - Continuous Integration
+   - Call `make all` in Travis script
+ - Other fixes and improvements
+   - Fix #34 https://github.com/STORM-IRIT/OpenGR/issues/34
+   - Partially fix #36 https://github.com/STORM-IRIT/OpenGR/issues/36
+
 ## V1.1.x
 This release introduces new code structure allowing use as an actual library.
 
