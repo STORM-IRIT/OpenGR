@@ -165,9 +165,11 @@ if(GIT_FOUND)
     execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         OUTPUT_VARIABLE GIT_CHANGESET)
-    # remove new line sometime appearing in git changeset
-    string(REGEX REPLACE "\n$" "" GIT_CHANGESET "${GIT_CHANGESET}")
-    string(SUBSTRING ${GIT_CHANGESET} 0 7 GIT_CHANGESET_SHORT)
+    if( GIT_CHANGESET )
+        # remove new line sometime appearing in git changeset
+        string(REGEX REPLACE "\n$" "" GIT_CHANGESET "${GIT_CHANGESET}")
+        string(SUBSTRING ${GIT_CHANGESET} 0 7 GIT_CHANGESET_SHORT)
+    endif()
 else()
     set(GIT_CHANGESET "")
     set(GIT_CHANGESET_SHORT "")
@@ -212,7 +214,6 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen" VERBATIM
         )
-
     install( DIRECTORY ${OpenGR_DOC_DIRECTORY}/ DESTINATION ${CMAKE_INSTALL_PREFIX}/doc )
 endif(DOXYGEN_FOUND)
 
