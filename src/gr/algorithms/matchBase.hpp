@@ -31,9 +31,7 @@ template <typename PointType, typename TransformVisitor, template < class, class
 MATCH_BASE_TYPE::MatchBase(const typename MATCH_BASE_TYPE::OptionsType &options,
                       const Utils::Logger& logger
                        )
-    : max_base_diameter_(-1)
-    , P_mean_distance_(1.0)
-    , randomGenerator_(options.randomSeed)
+    : randomGenerator_(options.randomSeed)
     , logger_(logger)
     , options_(options)
 {}
@@ -288,7 +286,7 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
         std::vector<typename InputRange2::value_type> uniform_Q, sampled_Q_3D;
 
         sampler(Q, options_, uniform_Q);
-    
+
         std::vector<int> indices(uniform_Q.size());
         std::iota( std::begin(indices), std::end(indices), 0 );
         std::shuffle(indices.begin(), indices.end(), randomGenerator_);
@@ -296,15 +294,15 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
         indices.resize(nbSamples);
 
         // using the indices, copy elements from uniform_Q to sampled_P_3D_
-        for(int i : indices) 
+        for(int i : indices)
             sampled_Q_3D_.emplace_back(uniform_Q[i]);
-        
+
         uniform_Q.clear();
     }
     else
     {
         Log<LogLevel::ErrorReport>( "(Q) More samples requested than available: use whole cloud" );
-        
+
         // copy all the points
         std::copy(Q.begin(), Q.end(), std::back_inserter(sampled_Q_3D_));
     }
@@ -322,7 +320,7 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
 
 
     initKdTree();
-    
+
     // Compute the diameter of P approximately (randomly). This is far from being
     // Guaranteed close to the diameter but gives good results for most common
     // objects if they are densely sampled.

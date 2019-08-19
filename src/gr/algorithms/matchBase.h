@@ -112,17 +112,17 @@ public:
     using OptionsType = gr::Utils::CRTP < OptExts ... , Options >;
 
     /// A convenience class used to wrap (any) PointType to allow mutation of position
-    /// of point samples for internal computations. 
+    /// of point samples for internal computations.
     struct PosMutablePoint : public PointType
     {
         using VectorType = typename PointType::VectorType;
-        
+
         private:
             VectorType posCopy;
-        
+
         public:
             template<typename ExternalType>
-            PosMutablePoint(const ExternalType& i) 
+            PosMutablePoint(const ExternalType& i)
                 : PointType(i), posCopy(PointType(i).pos()) { }
 
             inline VectorType & pos() { return posCopy; }
@@ -188,24 +188,24 @@ protected:
     /// P and the estimated overlap and used to limit the distance between the
     /// points in the base in P so that the probability to have all points in
     /// the base as inliers is increased.
-    Scalar max_base_diameter_;
+    Scalar max_base_diameter_ {Scalar( -1 )};
     /// The diameter of P.
-    Scalar P_diameter_;
+    Scalar P_diameter_ {Scalar( 0 )};
     /// Mean distance between points and their nearest neighbor in the set P.
     /// Used to normalize the "delta" which is given in terms of this distance.
-    Scalar P_mean_distance_;
+    Scalar P_mean_distance_ {Scalar( 0 )};
     /// The transformation matrix by wich we transform Q to P
-    Eigen::Matrix<Scalar, 4, 4> transform_;
+    Eigen::Matrix<Scalar, 4, 4> transform_ {Eigen::Matrix<Scalar, 4, 4>::Identity()};
     /// Sampled P (3D coordinates).
     std::vector<PosMutablePoint> sampled_P_3D_;
     /// Sampled Q (3D coordinates).
     std::vector<PosMutablePoint> sampled_Q_3D_;
     /// The centroid of P.
-    VectorType centroid_P_;
+    VectorType centroid_P_ {VectorType::Zero()};
     /// The centroid of Q.
-    VectorType centroid_Q_;
-    VectorType qcentroid1_;
-    VectorType qcentroid2_;
+    VectorType centroid_Q_ {VectorType::Zero()};
+    VectorType qcentroid1_ {VectorType::Zero()};
+    VectorType qcentroid2_ {VectorType::Zero()};
     /// KdTree used to compute the LCP
     KdTree<Scalar> kd_tree_;
     std::mt19937 randomGenerator_;
