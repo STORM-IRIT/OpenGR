@@ -7,8 +7,8 @@ OpenGR is a set C++ libraries for 3D Global Registration, standalone application
 It provides state of the art global registration techniques for 3d pointclouds. Still under active development, the library is currently improved by adding wrappers to existing software, and by stabilizing the API.
 
 In a nutshell, it provides:
-* two core packages: [algorithms](@ref GlobalRegistration::algorithms) and [accelerators](@ref GlobalRegistration::accelerators),
-* two convenience packages: [io](@ref GlobalRegistration::io) and [utils](@ref GlobalRegistration::utils),
+* two core packages: [algorithms](@ref gr::algorithms) and [accelerators](@ref gr::accelerators),
+* a convenience packages: [utils](@ref gr::utils),
 * several [demonstrators](@ref Super4PCS-Demos):
    * a [command line application](@ref Super4PCS-App),
    * wrappers to use the algorithms with the [Point Cloud Library](@ref Super4PCS-PCL) and [CGAL](@ref Super4PCS-CGAL) (coming soon)
