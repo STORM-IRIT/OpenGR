@@ -36,8 +36,7 @@ public:
 
   // Internal data
   typedef Eigen::Matrix<Scalar, 3, 1> Point;
-  typedef Accelerators::PairExtraction::HyperSphere
-  < typename PairCreationFunctor::Point, 3, Scalar> Primitive;
+  typedef HyperSphere< typename PairCreationFunctor::Point, 3, Scalar> Primitive;
 
   std::vector< /*Eigen::Map<*/typename PairCreationFunctor::Point/*>*/ > points;
   std::vector< Primitive > primitives;

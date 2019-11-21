@@ -1,6 +1,6 @@
 project (OpenGR-AlgoLib)
 
-set(algo_ROOT "${SRC_DIR}/super4pcs/algorithms")
+set(algo_ROOT "${SRC_DIR}/gr/algorithms")
 
 file(GLOB_RECURSE algo_relative_INCLUDE ${algo_ROOT}/*.h ${algo_ROOT}/*.hpp)
 

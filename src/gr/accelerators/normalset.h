@@ -51,6 +51,10 @@
 #include "gr/utils/disablewarnings.h"
 #include "gr/accelerators/utils.h"
 
+#include <vector>
+#include <array>
+#include <cmath> //log2
+
 namespace gr{
 
 /*!

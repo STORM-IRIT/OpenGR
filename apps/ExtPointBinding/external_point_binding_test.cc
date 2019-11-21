@@ -57,7 +57,7 @@ struct TransformVisitor {
   * If desired (by setting outputSampled1 and outputSampled2), the clouds could be
   * exported. The function takes the matcher as parameter, and exports the sampled
   * clouds of the matcher.
-  */ 
+  */
 template<typename Matcher>
 void exportSampledClouds(const Matcher& matcher, const Utils::Logger& logger)
 {
@@ -218,10 +218,10 @@ int main(int argc, char **argv) {
       /**
        * Here, PointAdapter does not really serve as an adapter since the point type
        * that we have as the type of the instances of points already comply with
-       * the PointConcept. Therefore, we just pass the point type as the adapter type. 
+       * the PointConcept. Therefore, we just pass the point type as the adapter type.
        * */
       using PointAdapter = gr::Point3D<Scalar>;
-      using MatcherType  = gr::Match4pcsBase<gr::FunctorSuper4PCS, PointAdapter, 
+      using MatcherType  = gr::Match4pcsBase<gr::FunctorSuper4PCS, PointAdapter,
                                              TrVisitorType, gr::AdaptivePointFilter,
                                              gr::AdaptivePointFilter::Options>;
       using OptionType   = typename MatcherType::OptionsType;
@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
                                  "instances using extlib1::PointAdapter"             );
 
       /**
-       * Convert the vectors of gr::Point3D<float> instances to some containers of 
+       * Convert the vectors of gr::Point3D<float> instances to some containers of
        * extlib1::PointType1 instances, so that, we can assume that we have some
        * containers of extlib1::PointType1 instances in hand to use as input to
        * gr registration methods.
@@ -309,14 +309,14 @@ int main(int argc, char **argv) {
       // Export sampled point clouds - if paths were set
       exportSampledClouds(matcher, logger);
     }
-    else if(point_type == 2) /* extlib2::PointType2, convert read sets to lists 
+    else if(point_type == 2) /* extlib2::PointType2, convert read sets to lists
                               * of PointType2 to emulate PointAdapter usage */
     {
       logger.Log<Utils::Verbose>("Registration on std::list of extlib2::PointType2"
                                  " instances using extlib2::PointAdapter");
 
       /**
-       * Convert the vectors of gr::Point3D<float> instances to some containers of 
+       * Convert the vectors of gr::Point3D<float> instances to some containers of
        * extlib2::PointType2 instances, so that, we can assume that we have some
        * containers of extlib2::PointType2 instances in hand to use as input to
        * gr registration methods.
@@ -357,7 +357,7 @@ int main(int argc, char **argv) {
                               input1.c_str(),
                               ": \n",
                               mat);
-        
+
       // Export sampled point clouds - if paths were set
       exportSampledClouds(matcher, logger);
 

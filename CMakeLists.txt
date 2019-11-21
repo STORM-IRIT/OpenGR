@@ -129,13 +129,12 @@ message(STATUS "STB root path: ${STB_INCLUDE_DIR}")
 
 include_directories(${SRC_DIR})
 
-add_subdirectory(${SRC_DIR}/gr/io)
 add_subdirectory(${SRC_DIR}/gr/utils)
 add_subdirectory(${SRC_DIR}/gr/accelerators)
 add_subdirectory(${SRC_DIR}/gr/algorithms)
 
 # Add main target
-add_custom_target(opengr DEPENDS opengr_utils opengr_io opengr_accel opengr_algo )
+add_custom_target(opengr DEPENDS opengr_utils opengr_accel opengr_algo )
 if(OpenGR_USE_CHEALPIX)
     add_dependencies(opengr chealpix)
 endif(OpenGR_USE_CHEALPIX)
@@ -151,9 +150,7 @@ endif(OpenGR_COMPILE_TESTS)
 
 include(cmake/AssetsAndScripts.cmake)
 
-if(OpenGR_COMPILE_DEMOS)
-        add_subdirectory(demos)
-endif(OpenGR_COMPILE_DEMOS)
+add_subdirectory(apps)
 
 ################################################################################
 # API documentation (generated with Doxygen)                                   #
@@ -281,7 +278,7 @@ configure_file(
     "cmake/Config.cmake.in"
     "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 )
-export(TARGETS opengr_io FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-IOLibTargets.cmake")
+
 export(TARGETS opengr_algo FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AlgoLibTargets.cmake")
 export(TARGETS opengr_accel FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AccelLibTargets.cmake")
 export(TARGETS opengr_utils FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-UtilsLibTargets.cmake")
@@ -291,8 +288,6 @@ endif(OpenGR_USE_CHEALPIX)
 file(COPY "${version_config}" DESTINATION "${CMAKE_BINARY_DIR}/cmake"
 )
 
-
-install(EXPORT OpenGR-IOLibTargets    DESTINATION ${config_install_dir})
 install(EXPORT OpenGR-AlgoLibTargets  DESTINATION ${config_install_dir})
 install(EXPORT OpenGR-AccelLibTargets DESTINATION ${config_install_dir})
 install(EXPORT OpenGR-UtilsLibTargets DESTINATION ${config_install_dir})

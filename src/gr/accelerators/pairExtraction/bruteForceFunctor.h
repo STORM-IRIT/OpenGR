@@ -53,8 +53,6 @@
 #include <iostream>
 
 namespace gr{
-namespace Accelerators{
-namespace PairExtraction{
 
 struct DummyPrimitive {};
 
@@ -115,9 +113,7 @@ BruteForceFunctor<DummyPrimitive, Point, dim, Scalar>::process(
   }
 }
 
-} // namespace PairExtraction
-} // namespace Accelerators
-} // namespace Super4PCS
+} // namespace gr
 
 #endif // _BRUTE_FORCE_FUNCTOR_H_
 

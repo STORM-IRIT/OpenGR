@@ -233,14 +233,12 @@ template<typename Scalar,
          template <typename,typename,int,typename> class _Functor>
 void callSubTests()
 {
-    using namespace gr::Accelerators::PairExtraction;
-
     typedef  Eigen::Matrix<Scalar, Dim, 1> EigenPoint;
     typedef  HyperSphere< EigenPoint, Dim, Scalar > Sphere;
     typedef _Functor<Sphere, EigenPoint, Dim, Scalar> Functor;
 
-    Scalar   r = 0.5; // radius of the spheres
-    Scalar eps = GetRoundedEpsilonValue(0.125/16.); // epsilon value
+    Scalar   r = Scalar( 0.5 ); // radius of the spheres
+    Scalar eps = GetRoundedEpsilonValue(Scalar( 0.125 )/ Scalar( 16.) ); // epsilon value
     unsigned int nbPoint = 2500;  // size of Q point cloud
     int minNodeSize = 50;
 
@@ -370,8 +368,6 @@ int main(int argc, const char **argv) {
 
     using std::cout;
     using std::endl;
-    using namespace gr::Accelerators::PairExtraction;
-
 
     cout << "Extract pairs in 2 dimensions (BRUTE FORCE)..." << endl;
     callSubTests<float, 2, BruteForceFunctor>();

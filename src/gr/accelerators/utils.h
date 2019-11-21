@@ -48,6 +48,10 @@
 #ifndef _OPENGR_ACCELERATORS_UTILS_H_
 #define _OPENGR_ACCELERATORS_UTILS_H_
 
+#include <string>
+#include <stdexcept> //out_of_range
+#include <cmath> //floor
+#include <array>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -176,7 +180,7 @@ UnrollIndexLoop(const ndIndexT& coord,
 
 
 /// Compute the 3^dim neighborhood for a cell
-/// \FIXME This implementation is not efficient and must be improved
+/// \TODO This implementation is not efficient and must be improved
 /// e.g., do no allocate any array, just call a function with the ids.
 struct OneRingNeighborhood {
     /// helper class

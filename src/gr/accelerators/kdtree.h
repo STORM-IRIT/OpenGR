@@ -54,6 +54,7 @@
 
 #include <limits>
 #include <iostream>
+#include <vector>
 #include <numeric>  //iota
 
 // max depth of the tree
@@ -564,7 +565,7 @@ void KdTree<Scalar, Index>::createTree(unsigned int nodeId, unsigned int start, 
         }
     }
 }
-} //namespace Super4PCS
+} //namespace gr
 
 
 #endif // KDTREE_H

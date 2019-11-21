@@ -45,7 +45,7 @@ public:
                   std::vector<Eigen::Matrix2f> &tex_coords,
                   std::vector<typename gr::Point3D<Scalar>::VectorType> &normals,
                   std::vector<tripple> &tris,
-                  std::vector<std::string> &mtls);           
+                  std::vector<std::string> &mtls);
 
   template<typename PointRange,
            typename TextCoordRange,
@@ -112,7 +112,7 @@ private:
            const NormalRange &normals,
            const TrisRange &tris,
            const MTLSRange &mtls);
-           
+
   /*!
    * \brief formatPolyworksMatrix Format 4x4 matrice so it can be loaded by polyworks
    * \param mat
@@ -131,7 +131,7 @@ private:
 
   void
   stbi_image_free_(void *retval_from_stbi_load);
-  
+
   const char *
   stbi_failure_reason_(void);
 

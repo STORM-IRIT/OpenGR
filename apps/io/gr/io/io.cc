@@ -1,4 +1,4 @@
-#include "gr/io/io.h"
+#include "io.h"
 
 #include <Eigen/Geometry>
 
@@ -75,7 +75,7 @@ IOManager::stbi_image_free_(void *retval_from_stbi_load)
 {
     return stbi_image_free(retval_from_stbi_load);
 }
-  
+
 const char *
 IOManager::stbi_failure_reason_(void)
 {

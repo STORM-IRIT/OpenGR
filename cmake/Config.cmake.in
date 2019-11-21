@@ -25,7 +25,6 @@ endif(@OpenGR_USE_CHEALPIX@)
 
 
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-AccelLibTargets.cmake")
-include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-IOLibTargets.cmake")
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-AlgoLibTargets.cmake")
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-UtilsLibTargets.cmake")
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGRConfigVersion.cmake")
@@ -34,10 +33,9 @@ include("@OpenGR_EXPORT_TARGET_DIR@/OpenGRConfigVersion.cmake")
 # Compute paths
 set(OpenGR_INCLUDE_DIR "@OpenGR_INSTALL_INC_DIR@/")
 set(OpenGR_LIB_DIR "@OpenGR_INSTALL_LIB_DIR@/")
-set(OpenGR_LIBRARIES opengr_io)
 
 if(@OpenGR_USE_CHEALPIX@)
-  list(APPEND OpenGR_LIBRARIES chealpix)
+  set(OpenGR_LIBRARIES chealpix)
 endif(@OpenGR_USE_CHEALPIX@)
 
 set(OpenGR_FOUND 1)

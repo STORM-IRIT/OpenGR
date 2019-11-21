@@ -1,6 +1,5 @@
 #include "gr/algorithms/match4pcsBase.h"
 #include "gr/algorithms/FunctorSuper4pcs.h"
-#include "gr/io/io.h"
 #include "gr/utils/geometry.h"
 #include <gr/algorithms/PointPairFilter.h>
 
@@ -20,17 +19,11 @@ int main(int argc, char **argv) {
   vector<Point3D<float> > set1, set2;
   vector<Eigen::Matrix2f> tex_coords1, tex_coords2;
   vector<typename Point3D<float>::VectorType> normals1, normals2;
-  vector<tripple> tris1, tris2;
   vector<std::string> mtls1, mtls2;
 
-  IOManager iomanager;
-
-  // dummy call, to test symbols accessibility
-  iomanager.ReadObject("", set1, tex_coords1, normals1, tris1, mtls1);
-
+  // dummy calls, to test symbols accessibility
   // check availability of the Utils functions
-  if (tris1.size() == 0)
-    Utils::CleanInvalidNormals(set1, normals1);
+  Utils::CleanInvalidNormals(set1, normals1);
 
   // Our matcher.
   OptionType options;
@@ -51,8 +44,6 @@ int main(int argc, char **argv) {
   score = matcher.ComputeTransformation(set1, set2, mat, sampler, visitor);
 
   logger.Log<Utils::Verbose>( "Score: ", score );
-
-  iomanager.WriteMatrix("output.map", mat.cast<double>(), IOManager::POLYWORKS);
 
   return 0;
 }

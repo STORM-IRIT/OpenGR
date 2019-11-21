@@ -53,8 +53,6 @@
 #include <iostream>
 
 namespace gr{
-namespace Accelerators{
-namespace PairExtraction{
 
 template <typename Scalar>
 static Scalar GetRoundedEpsilonValue(Scalar epsilon, int* lvl = nullptr) {
@@ -233,9 +231,7 @@ IntersectionFunctor<Primitive, Point, dim, Scalar>::process(
   }
 }
 
-} // namespace PairExtraction
-} // namespace Accelerators
-} // namespace Super4PCS
+} // namespace gr
 
 #endif
 

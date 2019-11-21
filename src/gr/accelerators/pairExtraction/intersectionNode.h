@@ -52,8 +52,6 @@
 #include "gr/accelerators/utils.h"
 
 namespace gr{
-namespace Accelerators{
-namespace PairExtraction{
 
 /*!
   \brief Multidimensional node used for intersection query
@@ -244,9 +242,7 @@ NdNode< Point, _dim, Scalar, _PointContainer, _IdContainer>::split(
   }
 }
 
-} // namespace Accelerators
-} // namespace PairExtraction
-} // namespace Super4PCS
+} // namespace gr
 
 #endif
 

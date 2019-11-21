@@ -55,8 +55,6 @@
 #include <Eigen/Core>
 
 namespace gr{
-namespace Accelerators{
-namespace PairExtraction{
 
 template <class Point, int _dim, typename Scalar>
 class HyperSphere{
@@ -167,9 +165,7 @@ public:
   inline Scalar& radius() { return _radius; }
 };
 
-} // namespace Accelerators
-} // namespace PairExtraction
-} // namespace Super4PCS
+} // namespace gr
 
 #endif
 

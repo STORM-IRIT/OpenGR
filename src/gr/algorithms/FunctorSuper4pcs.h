@@ -79,8 +79,6 @@ namespace gr {
                                  int base_point2,
                                  PairsVector* pairs) const {
 
-            using namespace gr::Accelerators::PairExtraction;
-
             pcfunctor_.pairs = pairs;
 
             pairs->clear();
@@ -171,7 +169,6 @@ namespace gr {
 
             std::set< std::pair<unsigned int, unsigned int > > comb;
 
-            unsigned int j = 0;
             std::vector<unsigned int> nei;
             // 2. Query time
             for (unsigned int i = 0; i < Second_pairs.size(); ++i) {
