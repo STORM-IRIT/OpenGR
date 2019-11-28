@@ -28,25 +28,26 @@ foreach(f ${accel_relative_INCLUDE})
     list(APPEND accel_installed_INCLUDE "include/${f}")
 endforeach(f)
 
-add_library(opengr_accel INTERFACE)
-target_sources(opengr_accel INTERFACE
+add_library(accel INTERFACE)
+target_sources(accel INTERFACE
     $<BUILD_INTERFACE:${accel_INCLUDE}>
     $<INSTALL_INTERFACE:${accel_installed_INCLUDE}>
     )
-
+add_dependencies(accel gr::utils)
 
 if(OpenGR_USE_CHEALPIX)
-    add_dependencies(opengr_accel chealpix)
+    add_dependencies(accel chealpix)
 endif(OpenGR_USE_CHEALPIX)
 
 set(targets_export_name "${PROJECT_NAME}Targets")
-install( TARGETS opengr_accel
+install( TARGETS accel
     EXPORT "${targets_export_name}"
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     INCLUDES DESTINATION include  )
 
+add_library(gr::accel ALIAS accel)
 
 #############################################
 #

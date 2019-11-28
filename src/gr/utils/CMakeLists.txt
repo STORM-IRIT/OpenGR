@@ -13,20 +13,22 @@ foreach(f ${utils_relative_INCLUDE})
     list(APPEND utils_installed_INCLUDE "include/${f_relative}")
 endforeach(f)
 
-add_library(opengr_utils INTERFACE)
-target_sources(opengr_utils INTERFACE
+add_library(utils INTERFACE)
+target_sources(utils INTERFACE
     $<BUILD_INTERFACE:${utils_INCLUDE}>
     $<INSTALL_INTERFACE:${utils_installed_INCLUDE}>
     )
 #############################################
 
 set(targets_export_name "${PROJECT_NAME}Targets")
-install( TARGETS opengr_utils
+install( TARGETS utils
     EXPORT "${targets_export_name}"
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     INCLUDES DESTINATION include  )
+
+add_library(gr::utils ALIAS utils)
 
 #############################################
 #

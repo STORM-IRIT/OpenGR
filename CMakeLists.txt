@@ -6,7 +6,7 @@ project (OpenGR LANGUAGES CXX VERSION 1.2.0)
 ################################################################################
 # Set option to enable timing recording
 OPTION (OpenGR_COMPILE_TESTS "Enable testing" TRUE)
-OPTION (OpenGR_COMPILE_DEMOS "Compile demo applications (including the Super4PCS standalone)" TRUE)
+OPTION (OpenGR_COMPILE_APPS "Compile demo applications (including the Super4PCS standalone)" TRUE)
 OPTION (IO_USE_BOOST "Use boost::filesystem for texture loading" TRUE)
 OPTION (ENABLE_TIMING "Enable computation time recording" FALSE)
 OPTION (OpenGR_USE_CHEALPIX "Use Chealpix for orientation filtering (deprecated)" FALSE)
@@ -134,7 +134,7 @@ add_subdirectory(${SRC_DIR}/gr/accelerators)
 add_subdirectory(${SRC_DIR}/gr/algorithms)
 
 # Add main target
-add_custom_target(opengr DEPENDS opengr_utils opengr_accel opengr_algo )
+add_custom_target(opengr DEPENDS utils accel algo )
 if(OpenGR_USE_CHEALPIX)
     add_dependencies(opengr chealpix)
 endif(OpenGR_USE_CHEALPIX)
@@ -279,18 +279,18 @@ configure_file(
     "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 )
 
-export(TARGETS opengr_algo FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AlgoLibTargets.cmake")
-export(TARGETS opengr_accel FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AccelLibTargets.cmake")
-export(TARGETS opengr_utils FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-UtilsLibTargets.cmake")
+export(TARGETS algo FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AlgoLibTargets.cmake")
+export(TARGETS accel FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-AccelLibTargets.cmake")
+export(TARGETS utils FILE "${CMAKE_BINARY_DIR}/cmake/OpenGR-UtilsLibTargets.cmake")
 if(OpenGR_USE_CHEALPIX)
     export(TARGETS chealpix FILE "${CMAKE_BINARY_DIR}/cmake/chealpixTargets.cmake")
 endif(OpenGR_USE_CHEALPIX)
 file(COPY "${version_config}" DESTINATION "${CMAKE_BINARY_DIR}/cmake"
 )
 
-install(EXPORT OpenGR-AlgoLibTargets  DESTINATION ${config_install_dir})
-install(EXPORT OpenGR-AccelLibTargets DESTINATION ${config_install_dir})
-install(EXPORT OpenGR-UtilsLibTargets DESTINATION ${config_install_dir})
+install(EXPORT OpenGR-AlgoLibTargets  DESTINATION ${config_install_dir} NAMESPACE gr::)
+install(EXPORT OpenGR-AccelLibTargets DESTINATION ${config_install_dir} NAMESPACE gr::)
+install(EXPORT OpenGR-UtilsLibTargets DESTINATION ${config_install_dir} NAMESPACE gr::)
 
 if(OpenGR_USE_CHEALPIX)
     install(EXPORT chealpixTargets DESTINATION ${config_install_dir})

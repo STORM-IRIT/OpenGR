@@ -12,7 +12,7 @@ if( PCL_FOUND )
 
   include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
   add_executable(${PROJECT_NAME} ${Demo_PCL_SRC} ${Demo_PCL_headers})
-  target_link_libraries(${PROJECT_NAME} opengr_algo opengr_utils ${PCL_LIBRARIES})
+  target_link_libraries(${PROJECT_NAME} gr::algo gr::utils ${PCL_LIBRARIES})
 
   # [C/C++]>[General]>[Additional Include Directories]
   include_directories( ${PCL_INCLUDE_DIRS} )

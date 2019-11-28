@@ -13,27 +13,28 @@ foreach(f ${algo_relative_INCLUDE})
     list(APPEND algo_installed_INCLUDE "include/${f_relative}")
 endforeach(f)
 
-add_library(opengr_algo INTERFACE)
-target_sources(opengr_algo INTERFACE
+add_library(algo INTERFACE)
+target_sources(algo INTERFACE
     $<BUILD_INTERFACE:${algo_INCLUDE}>
     $<INSTALL_INTERFACE:${algo_installed_INCLUDE}>
     )
-add_dependencies(opengr_algo opengr_accel)
+add_dependencies(algo gr::accel gr::utils)
 
 
 if(OpenGR_USE_CHEALPIX)
     include_directories(${Chealpix_INCLUDE_DIR})
-    add_dependencies(opengr_algo chealpix)
+    add_dependencies(algo chealpix)
 endif(OpenGR_USE_CHEALPIX)
 
 set(targets_export_name "${PROJECT_NAME}Targets")
-install( TARGETS opengr_algo
+install( TARGETS algo
     EXPORT "${targets_export_name}"
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     INCLUDES DESTINATION include  )
 
+add_library(gr::algo ALIAS algo)
 
 #############################################
 #
