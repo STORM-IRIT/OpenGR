@@ -94,17 +94,18 @@ namespace gr {
         bool generateCongruents (CongruentBaseType& base,Set& congruent_quads) override;
 
         /// Tries to compute an inital base from P
-        /// @param [out] base The base, if found. Initial value is not used. Modified as 
+        /// @param [out] base The base, if found. Initial value is not used. Modified as
         /// the computed base if the return value is true.
         /// @return true if a base is found an initialized, false otherwise
         bool initBase(CongruentBaseType &base) override;
+
+    protected:
+        virtual bool initBase(CongruentBaseType &base, Scalar& invariant1, Scalar& invariant2);
 
     private:
         static inline Scalar distSegmentToSegment( const VectorType& p1, const VectorType& p2,
                                                    const VectorType& q1, const VectorType& q2,
                                                    Scalar& invariant1, Scalar& invariant2);
-
-        bool initBase(CongruentBaseType &base, Scalar& invariant1, Scalar& invariant2);
     };
 }
 
