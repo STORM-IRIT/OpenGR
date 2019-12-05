@@ -69,8 +69,8 @@ std::array<Scalar, nbSet> deltas  = {
 };
 
 std::array<Scalar, nbSet> overlaps = {
+    0.9,
     0.8,
-    0.7,
 };
 
 std::array<bool, nbSet> swapPQ {

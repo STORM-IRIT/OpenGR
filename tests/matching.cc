@@ -113,13 +113,13 @@ std::array<std::string, nbSet> confFiles = {
 };
 
 std::array<Scalar, nbSet> deltas  = {
-    0.006,
+    0.004,
     0.003,
 };
 
 std::array<Scalar, nbSet> overlaps = {
-    0.9,
-    0.7,
+    0.8,
+    0.8,
 };
 
 std::array<bool, nbSet> swapPQ {
@@ -371,9 +371,9 @@ void test_model(const vector<Transform> &transforms,
     cout << "trDiff = " << trDiff << endl;
 
     // use different tests, just to get more verbose output
-    VERIFY(rotDiff <= 0.2);
+    VERIFY(rotDiff <= 0.3);
     VERIFY(trDiff <= 0.1);
-    VERIFY(rotDiff + trDiff <= 0.2);
+    VERIFY(rotDiff + trDiff <= 0.3);
 }
 
 int main(int argc, const char **argv) {
