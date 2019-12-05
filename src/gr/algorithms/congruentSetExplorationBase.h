@@ -65,7 +65,7 @@ class CongruentSetExplorationOptions : public  TBase
 {
 public:
     using Scalar = typename TBase::Scalar;
-    
+
     inline bool configureOverlap(Scalar overlap_, Scalar terminate_threshold_ = Scalar(1)) {
         if(terminate_threshold_ < overlap_) return false;
         overlap_estimation = overlap_;
@@ -142,12 +142,17 @@ public:
                                  TransformVisitor& v);
 
     /// Tries to compute an inital base from P
-    /// @param [out] base The base, if found. Initial value is not used. Modified as 
+    /// @param [out] base The base, if found. Initial value is not used. Modified as
     /// the computed base if the return value is true.
     /// @return true if a base is found an initialized, false otherwise
     virtual bool initBase (CongruentBaseType &base) = 0;
-    
+
 protected:
+    /// Maximum base diameter. It is computed automatically from the diameter of
+    /// P and the estimated overlap and used to limit the distance between the
+    /// points in the base in P so that the probability to have all points in
+    /// the base as inliers is increased.
+    Scalar max_base_diameter_ {Scalar( -1 )};
     /// Number of trials. Every trial picks random base from P.
     int number_of_trials_;
     /// The points in the base (indices to P). It is being updated in every

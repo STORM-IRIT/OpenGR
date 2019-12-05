@@ -67,7 +67,7 @@ CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFu
   const Scalar kSmallError = 0.00001;
   const int kMinNumberOfTrials = 4;
   const Scalar kDiameterFraction = 0.3;
-        
+
 #ifdef TEST_GLOBAL_TIMINGS
     kdTreeTime = 0;
     totalTime  = 0;
@@ -85,7 +85,7 @@ CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFu
   // distance between the points in the base as a fraction of the diameter.
   number_of_trials_ =
           static_cast<int>(first_estimation * (MatchBaseType::P_diameter_ / kDiameterFraction) /
-                           MatchBaseType::max_base_diameter_);
+                           max_base_diameter_);
   if (number_of_trials_ < kMinNumberOfTrials)
       number_of_trials_ = kMinNumberOfTrials;
 
@@ -99,6 +99,10 @@ CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFu
   }
 
   MatchBaseType::init(P, Q, sampler);
+
+  // Normalize the delta (See the paper) and the maximum base distance.
+  // delta = P_mean_distance_ * delta;
+  max_base_diameter_ = MatchBaseType::P_diameter_ * MatchBaseType::options_.getOverlapEstimation();
 
   best_LCP_ = Verify(MatchBaseType::transform_);
   MatchBaseType::template Log<LogLevel::Verbose>( "Initial LCP: ", best_LCP_ );

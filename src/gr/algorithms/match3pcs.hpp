@@ -94,7 +94,7 @@ namespace gr {
               template < class, class > typename PFO>
     bool Match3pcs<PointType, TransformVisitor, PairFilteringFunctor, PFO>::initBase (CongruentBaseType &base)
     {
-        if (!MatchBaseType::SelectRandomTriangle(base[0], base[1], base[2]))
+        if (!MatchBaseType::SelectRandomTriangle(MatchBaseType::max_base_diameter_, base[0], base[1], base[2]))
             return false;
 
         MatchBaseType::base_3D_ [0] = &MatchBaseType::sampled_P_3D_[base[0]];

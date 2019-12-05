@@ -68,14 +68,15 @@ MATCH_BASE_TYPE::MeanDistance() const {
 
 template <typename PointType, typename TransformVisitor, template < class, class > typename ... OptExts>
 bool
-MATCH_BASE_TYPE::SelectRandomTriangle(int &base1, int &base2, int &base3) {
+MATCH_BASE_TYPE::SelectRandomTriangle(Scalar max_base_diameter, int &base1, int &base2, int &base3) {
     int number_of_points = sampled_P_3D_.size();
     base1 = base2 = base3 = -1;
 
     // Pick the first point at random.
     int first_point = randomGenerator_() % number_of_points;
 
-    const Scalar sq_max_base_diameter_ = max_base_diameter_*max_base_diameter_;
+    const Scalar sq_max_base_diameter_ = max_base_diameter*max_base_diameter;
+    std::cout << "sq_max_base_diameter_: " << sq_max_base_diameter_ << std::endl;
 
     // Try fixed number of times retaining the best other two.
     Scalar best_wide = 0.0;
@@ -338,10 +339,6 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
     // Mean distance and a bit more... We increase the estimation to allow for
     // noise, wrong estimation and non-uniform sampling.
     P_mean_distance_ = MeanDistance();
-
-    // Normalize the delta (See the paper) and the maximum base distance.
-    // delta = P_mean_distance_ * delta;
-    max_base_diameter_ = P_diameter_;  // * estimated_overlap_;
 
     transform_ = Eigen::Matrix<Scalar, 4, 4>::Identity();
 

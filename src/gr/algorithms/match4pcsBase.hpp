@@ -119,7 +119,7 @@ namespace gr {
         // Try fix number of times.
         while (current_trial < MatchBaseType::kNumberOfDiameterTrials) {
             // Select a triangle if possible. otherwise fail.
-            if (!MatchBaseType::SelectRandomTriangle(base1, base2, base3)){
+            if (!MatchBaseType::SelectRandomTriangle(MatchBaseType::max_base_diameter_, base1, base2, base3)){
                 return false;
             }
 

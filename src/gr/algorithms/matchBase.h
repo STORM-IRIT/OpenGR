@@ -184,11 +184,6 @@ public:
 #endif
 
 protected:
-    /// Maximum base diameter. It is computed automatically from the diameter of
-    /// P and the estimated overlap and used to limit the distance between the
-    /// points in the base in P so that the probability to have all points in
-    /// the base as inliers is increased.
-    Scalar max_base_diameter_ {Scalar( -1 )};
     /// The diameter of P.
     Scalar P_diameter_ {Scalar( 0 )};
     /// Mean distance between points and their nearest neighbor in the set P.
@@ -234,7 +229,8 @@ protected :
     /// a triangle with all three edges close to this distance. Wide triangles helps
     /// to make the transformation robust while too large triangles makes the
     /// probability of having all points in the inliers small so we try to trade-off.
-    bool SelectRandomTriangle(int& base1, int& base2, int& base3);
+    /// \param max_base_diameter Maximum size allowed between two points of the base
+    bool SelectRandomTriangle(Scalar max_base_diameter, int& base1, int& base2, int& base3);
 
     /// Computes the best rigid transformation between three corresponding pairs.
     /// The transformation is characterized by rotation matrix, translation vector
