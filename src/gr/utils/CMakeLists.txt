@@ -18,6 +18,9 @@ target_sources(utils INTERFACE
     $<BUILD_INTERFACE:${utils_INCLUDE}>
     $<INSTALL_INTERFACE:${utils_installed_INCLUDE}>
     )
+set_target_properties(utils PROPERTIES
+  INTERFACE_COMPILE_FEATURES cxx_std_17
+)
 #############################################
 
 set(targets_export_name "${PROJECT_NAME}Targets")
