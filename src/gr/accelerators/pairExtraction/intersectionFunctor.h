@@ -200,7 +200,7 @@ IntersectionFunctor<Primitive, Point, dim, Scalar>::process(
       if ((*itP).intersect((*itN).center(), epsilon*2.f)){
 
         functor.beginPrimitiveCollect(pId);
-        for(unsigned int j = 0; j!= (*itN).rangeLength(); j++){
+        for(unsigned int j = 0; j!= (unsigned int)((*itN).rangeLength()); j++){
           if(pId>(*itN).idInRange(j))
             if((*itP).intersectPoint((*itN).pointInRange(j),epsilon))
               functor.process(pId, (*itN).idInRange(j));
@@ -218,7 +218,7 @@ IntersectionFunctor<Primitive, Point, dim, Scalar>::process(
 
         // Notice the functor we are collecting points for the current primitive
         functor.beginPrimitiveCollect(pId);
-        for(unsigned int j = 0; j!= (*itPairs).first.rangeLength(); j++){
+        for(unsigned int j = 0; j!= (unsigned int)((*itPairs).first.rangeLength()); j++){
           if(pId>(*itPairs).first.idInRange(j))
             if((*itP).intersectPoint((*itPairs).first.pointInRange(j),epsilon))
               functor.process(pId, (*itPairs).first.idInRange(j));
