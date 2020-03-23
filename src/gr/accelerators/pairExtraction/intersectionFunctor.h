@@ -114,7 +114,6 @@ IntersectionFunctor<Primitive, Point, dim, Scalar>::process(
   typedef NdNode<Point, dim, Scalar, PointContainer> Node;
   typedef typename std::vector<Node> NodeContainer;
 
-  typedef typename Node::IdContainer IdContainer;
   typedef typename std::pair<unsigned int, unsigned int> ResPair;
   typedef typename std::vector<ResPair> ResContainer;
 

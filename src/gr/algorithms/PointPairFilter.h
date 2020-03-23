@@ -82,7 +82,6 @@ struct PairFilterConcept {
             static_assert( WantedOptionsAndMore::IS_ADAPTIVEPOINTFILTER_OPTIONS,
                            "Options passed to AdaptivePointFilter must inherit AdaptivePointFilter::Options" );
             using Scalar      = typename PointType::Scalar;
-            using PairsVector = std::vector< std::pair<int, int> >;
             using VectorType  = typename PointType::VectorType;
 
 

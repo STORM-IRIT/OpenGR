@@ -191,7 +191,6 @@ NdNode< Point, _dim, Scalar, _PointContainer, _IdContainer>::split(
     Scalar rootEdgeHalfLength )
 {
   typedef NdNode<Point, _dim, Scalar, _PointContainer, _IdContainer> Node;
-  typedef std::vector< Node > Container;
 
   //! Compute number of childs at compile time
   const int nbNode = Utils::POW(int(2),int(Dim));
