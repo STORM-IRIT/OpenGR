@@ -19,7 +19,9 @@ target_sources(algo INTERFACE
     $<INSTALL_INTERFACE:${algo_installed_INCLUDE}>
     )
 add_dependencies(algo gr::accel gr::utils)
-
+set_target_properties(algo PROPERTIES
+  INTERFACE_COMPILE_FEATURES cxx_std_17
+)
 
 if(OpenGR_USE_CHEALPIX)
     include_directories(${Chealpix_INCLUDE_DIR})

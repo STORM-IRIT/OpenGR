@@ -34,6 +34,9 @@ target_sources(accel INTERFACE
     $<INSTALL_INTERFACE:${accel_installed_INCLUDE}>
     )
 add_dependencies(accel gr::utils)
+set_target_properties(accel PROPERTIES
+  INTERFACE_COMPILE_FEATURES cxx_std_17
+)
 
 if(OpenGR_USE_CHEALPIX)
     add_dependencies(accel chealpix)
