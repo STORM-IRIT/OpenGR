@@ -150,7 +150,6 @@ CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFu
             ( rot * scale * (MatchBaseType::qcentroid2_ + MatchBaseType::centroid_Q_))).homogeneous();
   };
 
-  Scalar last_best_LCP = best_LCP_;
   v(0, best_LCP_, transformation);
 
   bool ok = false;
@@ -220,7 +219,7 @@ bool CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilter
         typename CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFunctor, OptExts ...>::Set& set,
         TransformVisitor &v,
         size_t &nbCongruent) {
-    static const Scalar pi = std::acos(-1);
+//    static const Scalar pi = std::acos(-1);
 
     // get references to the basis coordinate
     Coordinates references;
@@ -230,8 +229,8 @@ bool CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilter
 //        std::cout << "[" << base[i] << "]: " << references[i].pos().transpose() << "\n";
     }
     const Coordinates& ref = references;
-    Scalar targetAngle = (ref[1]->pos() - ref[0]->pos()).normalized().dot(
-          (ref[3]->pos() - ref[2]->pos()).normalized());
+    // Scalar targetAngle = (ref[1]->pos() - ref[0]->pos()).normalized().dot(
+    //       (ref[3]->pos() - ref[2]->pos()).normalized());
 //    std::cout << "Target Angle : " << std::acos(targetAngle)*Scalar(180)/pi << std::endl;
 
     // Centroid of the basis, computed once and using only the three first points
