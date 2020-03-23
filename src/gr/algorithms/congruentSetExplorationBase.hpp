@@ -309,7 +309,9 @@ bool CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilter
 
                 // transformation has been computed between the two point clouds centered
                 // at the origin, we need to recompute the translation to apply it to the original clouds
+#ifdef OpenGR_USE_OPENMP
 #pragma omp critical
+#endif
                 {
                   auto getGlobalTransform =
                       [this, transform, centroid1, centroid2]
