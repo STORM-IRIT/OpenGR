@@ -55,6 +55,7 @@
 
 #include <vector>
 #include <set>
+#include <cmath>      //std::floor
 
 namespace gr{
 
@@ -109,7 +110,7 @@ private:
   inline Index3D coordinatesPos   ( const Point& p) const
   {
     return (p/_epsilon)
-            .unaryExpr(std::ptr_fun<Point::Scalar,Point::Scalar>(std::floor))
+            .unaryExpr([](typename Point::Scalar in) { return std::floor(in);} )
             .cast<typename Index3D::Scalar>();
   }
 
