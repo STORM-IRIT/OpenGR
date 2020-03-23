@@ -50,9 +50,9 @@ namespace gr {
         inline FunctorSuper4PCS (std::vector<PointType> &sampled_Q_3D_,
                                BaseCoordinates& base_3D_,
                                const OptionType& options)
-                                : pcfunctor_ (options,mySampled_Q_3D_)
-                                ,mySampled_Q_3D_(sampled_Q_3D_)
-                                ,myBase_3D_(base_3D_){}
+                                :mySampled_Q_3D_(sampled_Q_3D_)
+                                ,myBase_3D_(base_3D_)
+                                ,pcfunctor_ (options,mySampled_Q_3D_){}
 
         /// Initializes the data structures and needed values before the match
         /// computation.
