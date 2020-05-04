@@ -95,14 +95,6 @@ public:
         int max_time_seconds = 60;
         /// use a constant default seed by default
         unsigned int randomSeed = std::mt19937::default_seed;
-
-        /// Constraints about transformations
-
-        /// Maximum rotation angle. Set negative to ignore
-        Scalar max_angle = -1;
-        /// Maximum translation distance. Set negative to ignore
-        Scalar max_translation_distance = -1;
-        // \FIXME std::pair <Scalar, Scalar> scale_range;
     };
 
     using OptionsType = gr::Utils::CRTP < OptExts ... , Options >;
@@ -158,4 +150,4 @@ protected :
 }; /// class AbstractMatchBase
 } /// namespace gr
 
-#endif // _OPENGR_ALGO_MATCH_BASE_
+#endif // _OPENGR_ALGO_ABSTRACT_MATCH_BASE_

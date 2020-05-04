@@ -148,7 +148,7 @@ class Point3D
 };
 
 
-//// ----- MatchBase Options -----
+//// ----- PairwiseMatchBase Options -----
 ///// delta and overlap_estimation are the application parameters. All other
 ///// parameters are more likely to keep fixed and they can be set via the setters.
 //    struct MatchOptions {
