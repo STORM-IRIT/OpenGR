@@ -124,8 +124,6 @@ namespace pcl
       using MatcherType   = gr::Match4pcsBase<gr::FunctorSuper4PCS, PointType, TransformVisitor, gr::AdaptivePointFilter, gr::AdaptivePointFilter::Options>;
       using OptionType    = typename MatcherType::OptionsType;
 
-      OptionType options_;
-
       /** \brief Constructor */
       Super4PCS ()
       {
@@ -137,12 +135,27 @@ namespace pcl
       virtual ~Super4PCS ()
       {
       }
+      
+      /** \brief Setter for the delta (see paper).
+       */
+      inline void setDelta(float delta) { options_.delta = delta; }
+      inline void setSampleSize(int sampleSize) { options_.sample_size = sampleSize; }
+      inline void setMaxTimeSeconds(float seconds) { options_.max_time_seconds = seconds; }
+      inline void setOverlap(float overlap) { options_.configureOverlap(overlap); }
 
       /** \brief Get the fitness score of alignment. Range from 0-1, higher is better.
        */
       inline float getFitnessScore() const { return fitness_score_; }
+      inline float getDelta() const { return options_.delta; }
+      inline int getSampleSize() const { return options_.sample_size; }
+      inline float getMaxTimeSeconds() const { return options_.max_time_seconds; }
+      inline float getOverlap() const { return options_.getOverlapEstimation(); }
+      
+      inline OptionType getOptions() const { return options_; }
 
     protected:
+
+      OptionType options_;
 
       float fitness_score_;
 
