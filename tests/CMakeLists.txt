@@ -91,15 +91,23 @@ include_directories(${MOSEK_INCLUDE_DIRS})
 
 find_package(Boost 1.54 COMPONENTS system filesystem  REQUIRED)
 if (Boost_FOUND)
-include_directories(${Boost_INCLUDE_DIRS})
+    set(GRET_SDP_DATA_DIR_TO ${CMAKE_CURRENT_BINARY_DIR}/gret-sdp-data)
+    set(GRET_SDP_DATA_DIR_FROM ${PROJECT_SOURCE_DIR}/gret-sdp-data)
+    add_custom_target(copy_gret_sdp_data)
+    add_custom_command(TARGET copy_gret_sdp_data
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${GRET_SDP_DATA_DIR_TO}
+        COMMAND ${CMAKE_COMMAND} -E copy ${GRET_SDP_DATA_DIR_FROM}/* ${GRET_SDP_DATA_DIR_TO}/.
+    )
 
+    include_directories(${Boost_INCLUDE_DIRS})
     add_executable(gret-sdp ${gret-sdp_SRCS} ${testing_SRCS})
     add_dependencies(buildtests gret-sdp)
     add_test(NAME gret-sdp
         #CONFIGURATIONS Release
         COMMAND gret-sdp)
     target_link_libraries(gret-sdp ${SDPA_LIBRARIES} ${MOSEK_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils)      
-
+    add_dependencies(gret-sdp copy_gret_sdp_data)
 endif (Boost_FOUND)
 
 #############################################

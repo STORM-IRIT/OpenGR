@@ -48,6 +48,8 @@
 // source code and datasets are available for research use at
 // http://geometry.cs.ucl.ac.uk/projects/2014/super4PCS/.
 
+#include "gr/accelerators/MOSEKWrapper.h"
+#include "gr/accelerators/SDPAWrapper.h"
 #include "gr/algorithms/GRET_SDP.h"
 #include "gr/utils/timer.h"
 #include "gr/accelerators/kdtree.h"
@@ -234,7 +236,7 @@ int main(int argc, const char **argv) {
 
     DummyTransformVisitor tr_visitor;
 
-    matcher.RegisterPatches(patches, n, tr_visitor);
+    matcher.RegisterPatches<SDPA_WRAPPER<Scalar>>(patches, n, tr_visitor);
 
     std::vector<MatrixType> transformations;
     matcher.getTransformations(transformations);

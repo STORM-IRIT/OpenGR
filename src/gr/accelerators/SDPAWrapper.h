@@ -1,20 +1,18 @@
 #ifndef _OPENGR_ACCELERATORS_SDPA_WRAPPER_H
 #define _OPENGR_ACCELERATORS_SDPA_WRAPPER_H
 
-#include "gr/accelerators/GRET_SDP_SOLVER.h"
 #include <Eigen/Dense>
 #include <sdpa_call.h>
 
 namespace gr{
 
     template <typename Scalar_>
-    class SDPA_WRAPPER : public GRET_SDP_SOLVER<Scalar_>{
+    class SDPA_WRAPPER{
     
     public:
-        using SolverBaseType = GRET_SDP_SOLVER<Scalar_>;
-        using MatrixX = typename SolverBaseType::MatrixX;
+        using MatrixX = typename Eigen::Matrix<Scalar_, Eigen::Dynamic, Eigen::Dynamic>;
 
-        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m) override;
+        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m);
     };
     
     template <typename Scalar_>
