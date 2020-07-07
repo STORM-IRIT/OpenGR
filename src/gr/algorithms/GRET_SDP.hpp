@@ -7,7 +7,7 @@
 
 #include "gr/algorithms/GRET_SDP.h"
 #include "gr/utils/logger.h"
-
+#include "gr/accelerators/SDPAWrapper.h"
 
 namespace gr {
 
@@ -52,7 +52,9 @@ void GRET_SDP<PointType, TransformVisitor, OptExts ... >::RegisterPatches(const 
     // solve the SDP (P2) using C
     MatrixX G(m*d, m*d);
 
-    SolveSDP(C, G);
+    SDPA_WRAPPER<Scalar> sdpa_solver;
+    sdpa_solver.Solve(C,G,d,m);
+    //SolveSDP(C, G);
 
     // TODO: compute W
     // compute top d eigenvalues and eigenvectors
