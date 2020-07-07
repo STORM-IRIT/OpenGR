@@ -86,6 +86,9 @@ set(gret-sdp_SRCS gret-sdp.cc)
 find_package(SDPA REQUIRED)
 include_directories(${SDPA_INCLUDE_DIRS})
 
+find_package(MOSEK REQUIRED)
+include_directories(${MOSEK_INCLUDE_DIRS})
+
 find_package(Boost 1.54 COMPONENTS system filesystem  REQUIRED)
 if (Boost_FOUND)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -95,7 +98,7 @@ include_directories(${Boost_INCLUDE_DIRS})
     add_test(NAME gret-sdp
         #CONFIGURATIONS Release
         COMMAND gret-sdp)
-    target_link_libraries(gret-sdp ${SDPA_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils)      
+    target_link_libraries(gret-sdp ${SDPA_LIBRARIES} ${MOSEK_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils)      
 
 endif (Boost_FOUND)
 

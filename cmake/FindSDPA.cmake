@@ -1,6 +1,7 @@
 # Source: https://github.com/coin-or/Gravity/blob/master/cmake/FindSDPA.cmake
 
 
+set(SDPA_ROOT_DIR "$ENV{SDPA_ROOT_DIR}" CACHE PATH "SDPA root directory.")
 message("Looking for Sdpa in ${SDPA_ROOT_DIR}")
 
 

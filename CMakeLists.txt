@@ -127,9 +127,6 @@ endif( NOT STB_INCLUDE_DIR )
 include_directories(${STB_INCLUDE_DIR})
 message(STATUS "STB root path: ${STB_INCLUDE_DIR}")
 
-# configuring SDPA
-set(SDPA_ROOT_DIR "${PROJECT_SOURCE_DIR}/3rdparty/SDPA")
-
 ################################################################################
 ## OPENGR algo
 ################################################################################
