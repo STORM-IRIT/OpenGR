@@ -16,18 +16,18 @@ void GRET_SDP<PointType, TransformVisitor, OptExts ... >::RegisterPatches(const 
     d = PointType::dim();
     m = patches.size();
 
-    MatrixX L(n+m, n+m);
-    MatrixX D(m*d, m*d);
-    MatrixX C(m*d, m*d);
-    MatrixX B(m*d, n+m);
-    Linv = MatrixX(n+m, n+m);
+    MatrixX L = MatrixX::Zero(n+m, n+m);
+    MatrixX D = MatrixX::Zero(m*d, m*d);
+    MatrixX C = MatrixX::Zero(m*d, m*d);
+    MatrixX B = MatrixX::Zero(m*d, n+m);
+    Linv = MatrixX::Zero(n+m, n+m);
 
     // Compute matrices B, D and C
     for(int i = 0; i < patches.size(); i++){
         for(const std::pair<PointType,int> &point_with_index : patches[i]){
             int k = point_with_index.second;
             VectorType pos = point_with_index.first.pos();
-
+            
             L(k,k)++;
             L(k,n+i)--;
             L(n+i,k)--;

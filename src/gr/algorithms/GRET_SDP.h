@@ -70,9 +70,6 @@ public:
     MatrixX O;
     MatrixX OB;
     MatrixX Linv;
-    
-    std::vector<std::pair<_PointType, int>> registered_points_;
-    std::vector<MatrixType> transformations_;
 
 }; /// class GRET_SDP
 } /// namespace gr

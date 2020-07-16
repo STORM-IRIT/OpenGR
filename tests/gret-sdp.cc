@@ -218,6 +218,14 @@ Scalar compute_lcp( const gr::KdTree<Scalar>& P, const PointRange& Q){
 
 
 int main(int argc, const char **argv) {
+    if(argc != 2){
+        std::cout << "execute program using: " << "./gret-sdp" << " <config/file/path>" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::string config_file(argv[1]);
+
+
     using MatcherType = GRET_SDP<PointType, DummyTransformVisitor, GRET_SDP_Options>;
     using OptionType  = typename MatcherType::OptionsType;
     OptionType options;
@@ -225,7 +233,7 @@ int main(int argc, const char **argv) {
     RegistrationProblem problem;
 
     vector<MatrixType> gt_transformations;
-    extractPatchesAndTrFromConfigFile("gret-sdp-data/config.json", problem, gt_transformations);
+    extractPatchesAndTrFromConfigFile(config_file, problem, gt_transformations);
 
     const int d = problem.d;
     const int n = problem.n;
@@ -236,7 +244,7 @@ int main(int argc, const char **argv) {
 
     DummyTransformVisitor tr_visitor;
 
-    matcher.RegisterPatches<SDPA_WRAPPER<Scalar>>(patches, n, tr_visitor);
+    matcher.RegisterPatches<MOSEK_WRAPPER<Scalar>>(patches, n, tr_visitor);
 
     std::vector<MatrixType> transformations;
     matcher.getTransformations(transformations);
