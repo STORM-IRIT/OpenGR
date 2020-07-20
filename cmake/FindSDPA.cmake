@@ -25,7 +25,11 @@ find_library(Mumps_LIBRARY2 libmumps_common.a  HINTS "${SDPA_ROOT_DIR}/sdpa-7.3.
 find_library(Mumps_LIBRARY3 libpord.a  HINTS "${SDPA_ROOT_DIR}/sdpa-7.3.8/mumps/build/lib" )
 find_library(Mumps_LIBRARY4 libmpiseq.a	 HINTS "${SDPA_ROOT_DIR}/sdpa-7.3.8/mumps/build/libseq" )
 find_library(BLAS_LIBRARY libopenblas.a	HINTS "${SDPA_ROOT_DIR}/OpenBLAS")
-find_library(FORTRAN_LIBRARY libgfortran.so.5 HINTS "/usr/lib/x86_64-linux-gnu/")
+find_library(FORTRAN_LIBRARY NAMES libgfortran.so.5
+                                   libgfortran.so
+                             NAMES_PER_DIR
+                             HINTS "/usr/lib/x86_64-linux-gnu/"
+                                   "/usr/lib/gcc/x86_64-linux-gnu/5/")
 #find_library(FORTRAN_LIBRARY2 libquadmath.so.0	HINTS "/usr/lib/x86_64-linux-gnu/")
 endif()
 
