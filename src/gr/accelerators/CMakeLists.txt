@@ -12,8 +12,21 @@ set(accel_relative_INCLUDE
     ${accel_ROOT}/pairExtraction/intersectionPrimitive.h
     ${accel_ROOT}/normalset.h
     ${accel_ROOT}/normalset.hpp
-    ${accel_ROOT}/utils.h)
+    ${accel_ROOT}/normalset.hpp
+    ${accel_ROOT}/utils.h
+    ${accel_ROOT}/gret_sdp/wrappers.h)
 
+if(OpenGR_USE_SDPA)
+    set (accel_relative_INCLUDE
+        ${accel_relative_INCLUDE}
+        ${accel_ROOT}/gret_sdp/SDPAWrapper.h)
+endif(OpenGR_USE_SDPA)
+
+if(OpenGR_USE_MOSEK)
+    set (accel_relative_INCLUDE
+        ${accel_relative_INCLUDE}
+        ${accel_ROOT}/gret_sdp/MOSEKWrapper.h)
+endif(OpenGR_USE_MOSEK)
 
 if(OpenGR_USE_CHEALPIX)
     include_directories(${Chealpix_INCLUDE_DIR})
@@ -37,6 +50,19 @@ add_dependencies(accel gr::utils)
 set_target_properties(accel PROPERTIES
   INTERFACE_COMPILE_FEATURES cxx_std_17
 )
+if(OpenGR_USE_SDPA)
+    add_dependencies(accel SDPA)
+    target_link_libraries(accel INTERFACE ${SDPA_LIBRARIES})
+    target_include_directories(accel INTERFACE ${SDPA_INCLUDE_DIRS})
+    target_compile_definitions(accel INTERFACE OpenGR_USE_SDPA)
+endif(OpenGR_USE_SDPA)
+
+if(OpenGR_USE_MOSEK)
+    add_dependencies(accel MOSEK)
+    target_link_libraries(accel INTERFACE ${MOSEK_LIBRARIES})
+    target_include_directories(accel INTERFACE ${MOSEK_INCLUDE_DIRS})
+    target_compile_definitions(accel INTERFACE OpenGR_USE_MOSEK)
+endif(OpenGR_USE_MOSEK)
 
 if(OpenGR_USE_CHEALPIX)
     add_dependencies(accel chealpix)

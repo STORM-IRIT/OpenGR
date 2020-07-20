@@ -48,8 +48,7 @@
 // source code and datasets are available for research use at
 // http://geometry.cs.ucl.ac.uk/projects/2014/super4PCS/.
 
-#include "gr/accelerators/MOSEKWrapper.h"
-#include "gr/accelerators/SDPAWrapper.h"
+#include "gr/accelerators/gret_sdp/wrappers.h"
 #include "gr/algorithms/GRET_SDP.h"
 #include "gr/utils/timer.h"
 #include "gr/accelerators/kdtree.h"
@@ -244,7 +243,17 @@ int main(int argc, const char **argv) {
 
     DummyTransformVisitor tr_visitor;
 
-    matcher.RegisterPatches<MOSEK_WRAPPER<Scalar>>(patches, n, tr_visitor);
+    using WrapperType =
+#ifdef OpenGR_USE_MOSEK
+        MOSEK_WRAPPER<Scalar>;
+#elif OpenGR_USE_SDPA
+        SDPA_WRAPPER<Scalar>;
+#else
+        void;
+#error Could not find a wrapper. Either use SDPA or MOSEK
+#endif
+
+    matcher.RegisterPatches< WrapperType >(patches, n, tr_visitor);
 
     std::vector<MatrixType> transformations;
     matcher.getTransformations(transformations);
