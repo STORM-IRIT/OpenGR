@@ -105,6 +105,20 @@ if (Boost_FOUND)
         COMMAND gret-sdp gret-sdp-data/config.json)
     target_link_libraries(gret-sdp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils)
     add_dependencies(gret-sdp copy_gret_sdp_data)
+
+    if(OpenGR_USE_SDPA)
+        find_package( SDPA )
+        target_link_libraries(gret-sdp ${SDPA_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${SDPA_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_SDPA)
+    endif(OpenGR_USE_SDPA)
+
+    if(OpenGR_USE_MOSEK)
+        find_package( MOSEK )
+        target_link_libraries(gret-sdp ${MOSEK_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${MOSEK_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_MOSEK)
+    endif(OpenGR_USE_MOSEK)
 endif (Boost_FOUND)
 
 #############################################

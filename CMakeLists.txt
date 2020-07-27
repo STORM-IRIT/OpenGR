@@ -321,3 +321,8 @@ install(
     FILES "${project_config}" "${version_config}"
     DESTINATION "${config_install_dir}"
 )
+
+install(
+    FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindSDPA.cmake"
+    DESTINATION "${config_install_dir}"
+)
