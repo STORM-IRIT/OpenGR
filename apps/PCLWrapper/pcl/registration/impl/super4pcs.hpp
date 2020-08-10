@@ -77,7 +77,7 @@ pcl::Super4PCS<PointSource, PointTarget>::computeTransformation (PointCloudSourc
   fillPointSet(*target_, set1);
   fillPointSet(*input_, set2);;
 
-  fitness_score_ = matcher.ComputeTransformation(set1, set2, final_transformation_, sampler, visitor);
+  float score = matcher.ComputeTransformation(set1, set2, final_transformation_, sampler, visitor);
 
   transformPointCloud (*input_, output, final_transformation_);
 
