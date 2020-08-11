@@ -151,7 +151,8 @@ namespace pcl
       inline float getMaxTimeSeconds() const { return options_.max_time_seconds; }
       inline float getOverlap() const { return options_.getOverlapEstimation(); }
       
-      inline OptionType getOptions() const { return options_; }
+      inline OptionType& getOptions()  { return options_; }
+      inline const OptionType& getOptions() const { return options_; }
 
     protected:
 
@@ -172,4 +173,3 @@ namespace pcl
 #endif
 
 #include <pcl/registration/impl/super4pcs.hpp>
-
