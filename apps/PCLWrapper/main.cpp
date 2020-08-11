@@ -98,7 +98,7 @@ main (int argc, char **argv)
     }
 
   pcl::Super4PCS<PointNT,PointNT> align;
-  auto options = align.getOptions();
+  auto &options = align.getOptions();
   Demo::setOptionsFromArgs(options);
 
   // Perform alignment
