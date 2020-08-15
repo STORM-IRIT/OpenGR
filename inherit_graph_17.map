@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$a00036.html" title="gr::MatchBase\&lt; _PointType,\l _TransformVisitor, PairFiltering\lOptions..., CongruentSetExplorationOptions \&gt;" alt="" coords="5,104,320,160"/>
+<area shape="rect" id="node2" href="$a00017.html" title="gr::CongruentSetExploration\lBase\&lt; Traits3pcs\&lt; MatchBase\l\&lt; _PointType, _TransformVisitor,\l PairFilteringOptions, CongruentSetExploration\lOptions \&gt;::PosMutablePoint \&gt;, _PointType,\l _TransformVisitor, _PairFilteringFunctor,\l PairFilteringOptions \&gt;" alt="" coords="368,5,683,120"/>
+<area shape="rect" id="node4" href="$a00017.html" title="gr::CongruentSetExploration\lBase\&lt; Traits4pcs\&lt; MatchBase\l\&lt; _PointType, _TransformVisitor,\l PairFilteringOptions, CongruentSetExploration\lOptions \&gt;::PosMutablePoint \&gt;, _PointType,\l _TransformVisitor, _PairFilteringFunctor,\l PairFilteringOptions \&gt;" alt="" coords="368,144,683,259"/>
+<area shape="rect" id="node3" href="$a00034.html" title="Class for the computation of the 3PCS algorithm. " alt="" coords="731,35,953,91"/>
+<area shape="rect" id="node5" href="$a00035.html" title="Class for the computation of the 4PCS algorithm. " alt="" coords="731,166,953,237"/>
+</map>

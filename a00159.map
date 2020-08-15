@@ -1,0 +1,7 @@
+<map id="TBase" name="TBase">
+<area shape="rect" id="node2" href="$a00040.html" title="{gr::AdaptivePointFilter\l::Options\&lt; Derived, TBase \&gt;\n|+ max_color_distance\l+ max_normal_difference\l|}" alt="" coords="5,167,211,274"/>
+<area shape="rect" id="node3" href="$a00018.html" title="{gr::CongruentSetExploration\lOptions\&lt; Derived, TBase \&gt;\n||+ configureOverlap()\l+ getOverlapEstimation()\l+ getTerminateThreshold()\l}" alt="" coords="235,160,437,281"/>
+<area shape="rect" id="node4" href="$a00041.html" title="{gr::DummyPointFilter\l::Options\&lt; Derived, TBase \&gt;\n|+ dummyFilteringResponse\l|}" alt="" coords="461,175,667,267"/>
+<area shape="rect" id="node5" href="$a00043.html" title="{gr::MatchBase\&lt; PointType,\l _TransformVisitor, OptExts\l \&gt;::Options\&lt; Derived, TBase \&gt;\n|+ delta\l+ max_angle\l+ max_time_seconds\l+ max_translation_distance\l+ randomSeed\l+ sample_size\l|}" alt="" coords="691,131,911,311"/>
+<area shape="rect" id="node6" href="$a00042.html" title="{gr::PairFilterConcept\l::Options\&lt; Derived, TBase \&gt;\n||}" alt="" coords="936,175,1141,267"/>
+</map>

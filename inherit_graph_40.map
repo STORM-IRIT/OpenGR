@@ -1,0 +1,8 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$a00052.html" title="TBase" alt="" coords="5,143,67,170"/>
+<area shape="rect" id="node2" href="$a00040.html" title="gr::AdaptivePointFilter\l::Options\&lt; Derived, TBase \&gt;" alt="" coords="122,5,327,47"/>
+<area shape="rect" id="node3" href="$a00018.html" title="gr::CongruentSetExploration\lOptions\&lt; Derived, TBase \&gt;" alt="" coords="123,71,326,112"/>
+<area shape="rect" id="node4" href="$a00041.html" title="gr::DummyPointFilter\l::Options\&lt; Derived, TBase \&gt;" alt="" coords="122,136,327,177"/>
+<area shape="rect" id="node5" href="$a00043.html" title="gr::MatchBase\&lt; PointType,\l _TransformVisitor, OptExts\l \&gt;::Options\&lt; Derived, TBase \&gt;" alt="" coords="115,201,335,257"/>
+<area shape="rect" id="node6" href="$a00042.html" title="gr::PairFilterConcept\l::Options\&lt; Derived, TBase \&gt;" alt="" coords="122,280,327,321"/>
+</map>

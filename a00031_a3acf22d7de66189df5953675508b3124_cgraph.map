@@ -1,0 +1,3 @@
+<map id="gr::KdTree::createTree" name="gr::KdTree::createTree">
+<area shape="rect" id="node2" href="$a00031.html#a16bcf56cc682369cb33981bae3b9ca49" title="Used to build the tree: split the subset [start..end[ according to dim and splitValue, and returns the index of the first element of the second subset. " alt="" coords="213,29,332,56"/>
+</map>

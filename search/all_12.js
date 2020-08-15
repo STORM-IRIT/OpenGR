@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['scripts_2c_20demos_20and_20wrappers',['Scripts, Demos and wrappers',['../a00005.html',1,'index']]],
+  ['supported_20file_20formats',['Supported File Formats',['../a00007.html',1,'index']]],
+  ['sample_5fsize',['sample_size',['../a00043.html#a5da3652319388f064d3b5e113b76e844',1,'gr::MatchBase::Options']]],
+  ['sampled_5fp_5f3d_5f',['sampled_P_3D_',['../a00036.html#a1b373889b1e67d7fc9e6df33c657fdc1',1,'gr::MatchBase']]],
+  ['sampled_5fq_5f3d_5f',['sampled_Q_3D_',['../a00036.html#ae9633749c30edae74dc4e5df3c99b2c0',1,'gr::MatchBase']]],
+  ['samplerconcept',['SamplerConcept',['../a00051.html',1,'gr']]],
+  ['sampling_2eh',['sampling.h',['../a00099.html',1,'']]],
+  ['scalar',['Scalar',['../a00031.html#a4cdc21819baa372d38f2139dc4a6e0e3',1,'gr::KdTree::Scalar()'],['../a00027.html#afcf5d59604ba96a796be28b0fc618990',1,'gr::IndexedNormalHealSet::Scalar()'],['../a00028.html#a1dfaf828e465beba5d415a8edd3e6a27',1,'gr::IndexedNormalSet::Scalar()'],['../a00016.html#a868bf47d035c275553b47942cabe413f',1,'gr::BruteForceFunctor::Scalar()'],['../a00029.html#a7030e3ecfab63fa59d470fd41c818b48',1,'gr::IntersectionFunctor::Scalar()'],['../a00018.html#a7fee6a067025bc7c62b4a5338ebe5d71',1,'gr::CongruentSetExplorationOptions::Scalar()'],['../a00017.html#aeb5682dd300086eff3b907699ed26775',1,'gr::CongruentSetExplorationBase::Scalar()'],['../a00023.html#a867612afbed65362c7690088c6969e3d',1,'gr::Functor4PCS::Scalar()'],['../a00024.html#abf9fd1026cef3d632b601bb5e5ed2138',1,'gr::FunctorBrute4PCS::Scalar()'],['../a00025.html#a814aa07b58a4e08430c4f6c357b1d06e',1,'gr::FunctorSuper4PCS::Scalar()'],['../a00034.html#a2e2b5b1ce79711b8af6a2cc333e599d6',1,'gr::Match3pcs::Scalar()'],['../a00035.html#ae10bad3f35040d11b932b3a7a545d90a',1,'gr::Match4pcsBase::Scalar()'],['../a00036.html#ac9819a663e64c3278aea569a8f03707a',1,'gr::MatchBase::Scalar()'],['../a00043.html#a96cfd97fe8da710bb2b46d083f47f2be',1,'gr::MatchBase::Options::Scalar()'],['../a00044.html#a8610e864fe6dbea032244ae761a940a1',1,'gr::PairCreationFunctor::Scalar()'],['../a00040.html#ae1d3e72963a86ee007ea58e74ee96c96',1,'gr::AdaptivePointFilter::Options::Scalar()'],['../a00047.html#a5fe0a60374e911a0c83f4562bca2706f',1,'gr::PointConcept::Scalar()'],['../a00046.html#a144c7fb6ae7b0d46de58bbacfaed05aa',1,'gr::Point3D::Scalar()']]],
+  ['selectquadrilateral',['SelectQuadrilateral',['../a00035.html#a70bb5e3a87afdca78656ec6f96881cad',1,'gr::Match4pcsBase']]],
+  ['selectrandomtriangle',['SelectRandomTriangle',['../a00036.html#a1f98e405170f96f2e9d72090aa4032ac',1,'gr::MatchBase']]],
+  ['set',['Set',['../a00017.html#a24fa10f8891766986b4ad91aeba09b4f',1,'gr::CongruentSetExplorationBase::Set()'],['../a00054.html#abb3f9e2137a40ea30ff1bf31b3e9129b',1,'gr::Traits3pcs::Set()'],['../a00034.html#a10699d95aaf42e85803125a812db9916',1,'gr::Match3pcs::Set()'],['../a00055.html#a86b0e2afac6f5336d3b063113e9f5ead',1,'gr::Traits4pcs::Set()'],['../a00035.html#a0164bc0a2c889a8959285d870cf6f3b0',1,'gr::Match4pcsBase::Set()']]],
+  ['set_5fnormal',['set_normal',['../a00046.html#a52aaed26cc83b8985448aea6d2144ac3',1,'gr::Point3D']]],
+  ['set_5frgb',['set_rgb',['../a00046.html#a5ef1739a1e6c1305baaf6ac37e6b1bed',1,'gr::Point3D']]],
+  ['setbase',['setBase',['../a00044.html#a3b2f29e1890cfa24e2f66ba6b39ea6ea',1,'gr::PairCreationFunctor']]],
+  ['setloglevel',['setLogLevel',['../a00033.html#a346dfe73c5d2e497a4ee119111427ef1',1,'gr::Utils::Logger']]],
+  ['setradius',['setRadius',['../a00044.html#abe7128afd410e8d4f12a7bf26f07c224',1,'gr::PairCreationFunctor']]],
+  ['shared_2eh',['shared.h',['../a00100.html',1,'']]],
+  ['size',['size',['../a00030.html#addec2ff4d5b5e0f357c6baafbb792346',1,'gr::KdTree::KdNode::size()'],['../a00054.html#aeb6d13d8428cdeae82ac48c13a1ebc60',1,'gr::Traits3pcs::size()'],['../a00055.html#aa02f1ffb787719fe04a258e90aa484e5',1,'gr::Traits4pcs::size()']]],
+  ['split',['split',['../a00031.html#a16bcf56cc682369cb33981bae3b9ca49',1,'gr::KdTree::split()'],['../a00037.html#a878499c2d0e46726a7204e6a5bea4ddc',1,'gr::NdNode::split()']]],
+  ['splitvalue',['splitValue',['../a00030.html#a3e7a8fda686e372d58a7b3fe9de95d85',1,'gr::KdTree::KdNode']]],
+  ['sq',['sq',['../a00049.html#a098cde0b3553b8e845c05a74ccb72ba8',1,'gr::KdTree::QueryNode']]],
+  ['sqdist',['sqdist',['../a00050.html#ae7bf68e1366ea7c4811ba4c9f1754f10',1,'gr::KdTree::RangeQuery']]],
+  ['sqr',['SQR',['../a00079.html#ad41630f833e920c1ffa34722f45a8e77',1,'intersectionPrimitive.h']]],
+  ['start',['start',['../a00030.html#a78362b36197602fc7b5446d02e0cb8c6',1,'gr::KdTree::KdNode']]],
+  ['synch3dcontent',['synch3DContent',['../a00044.html#aa384bae4be3f489c1102d95387bf9c92',1,'gr::PairCreationFunctor']]]
+];

@@ -1,0 +1,3 @@
+<map id="gr::KdTree&lt; _Scalar, _Index &gt;" name="gr::KdTree&lt; _Scalar, _Index &gt;">
+<area shape="rect" id="node2" href="$a00031.html" title="{gr::KdTree\&lt; Scalar \&gt;\n|# _maxDepth\l# _nofPointsPerCell\l# mAABB\l# mIndices\l# mNodes\l# mPoints\l|+ _getIndices()\l+ _getNodes()\l+ _getPoints()\l+ aabb()\l+ add()\l+ add()\l+ doQueryDist()\l+ doQueryDistIndices()\l+ doQueryDistProcessIndices()\l+ doQueryRestrictedClosest\lIndex()\l+ finalize()\l+ KdTree()\l+ KdTree()\l+ ~KdTree()\l+ invalidIndex()\l# _doQueryDistIndicesWithFunctor()\l# createTree()\l# split()\l}" alt="" coords="5,497,256,912"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="gr::PairCreationFunctor&lt; PointType, _Scalar, FilterFunctor, Options &gt;" name="gr::PairCreationFunctor&lt; PointType, _Scalar, FilterFunctor, Options &gt;">
+<area shape="rect" id="node6" title="STL class. " alt="" coords="639,233,765,311"/>
+<area shape="rect" id="node9" href="$a00026.html" title="{gr::HyperSphere\&lt; Point,\l _dim, Scalar \&gt;\n||+ center()\l+ HyperSphere()\l+ HyperSphere()\l+ intersect()\l+ intersectFast()\l+ intersectPoint()\l+ operator Point()\l+ operator\&lt;()\l+ quantified()\l+ radius()\l+ radius()\l+ intersectPoint()\l}" alt="" coords="129,145,307,399"/>
+<area shape="rect" id="node11" href="$a00117.html" title="{int\n||}" alt="" coords="996,233,1035,311"/>
+</map>
