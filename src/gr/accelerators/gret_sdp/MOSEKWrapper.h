@@ -17,7 +17,7 @@ namespace gr{
         void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const Utils::Logger& logger, const int d, const int m);
     };
     
-    /// Computes the SDP (P2) as described in [this paper]((https://arxiv.org/abs/1306.5226)).
+    /// Computes the SDP (P2) as described in [this paper](https://arxiv.org/abs/1306.5226).
     /// P2: min(Tr(CG)) subject to G >= 0, G_ii = I_d (1<=i<=m).
     /// @param [in] C "patch-stress" matrix.
     /// @param [in] d Dimension.

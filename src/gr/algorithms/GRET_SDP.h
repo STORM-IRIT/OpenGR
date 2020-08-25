@@ -39,9 +39,7 @@ public:
 
     using LogLevel = typename MatchBaseType::LogLevel;
 
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
-
+    
     inline GRET_SDP(const OptionsType& options , const Utils::Logger &logger)
         : MatchBaseType(options, logger) {}
 
@@ -67,11 +65,11 @@ public:
     void getTransformations(TrRange& transformations);
 
     private:
-    /// dimension, currently set to 3
-    int d;
-    int m;
-    int n;
+    int d; /// Dimension of points. 
+    int m; /// Number of patches.
+    int n; /// Number of global coordinates.
 
+    /// 
     MatrixX O;
     MatrixX OB;
     MatrixX Linv;

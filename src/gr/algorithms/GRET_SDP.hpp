@@ -11,8 +11,8 @@ namespace gr {
 
 template <typename PointType, typename TransformVisitor, template < class, class > typename ... OptExts>
 template<typename Solver, typename PatchRange>
-void GRET_SDP<PointType, TransformVisitor, OptExts ... >::RegisterPatches(const PatchRange& patches, const int num_points, TransformVisitor& v){
-    n = num_points;
+void GRET_SDP<PointType, TransformVisitor, OptExts ... >::RegisterPatches(const PatchRange& patches, const int num_global_coordinates, TransformVisitor& v){
+    n = num_global_coordinates;
     d = PointType::dim();
     m = patches.size();
 
