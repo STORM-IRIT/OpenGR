@@ -1,3 +1,5 @@
 build*/
 *.user
 assets/demo*
+.vscode
+3rdparty/SDPA

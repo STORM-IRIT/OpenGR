@@ -41,8 +41,8 @@
 // Use google search on "4-points congruent sets" to see many related papers
 // and applications.
 
-#ifndef _OPENGR_ALGO_MATCH_BASE_
-#define _OPENGR_ALGO_MATCH_BASE_
+#ifndef _OPENGR_ALGO_PAIRWISE_MATCH_BASE_
+#define _OPENGR_ALGO_PAIRWISE_MATCH_BASE_
 
 #include <vector>
 
@@ -50,6 +50,7 @@
 #include <omp.h>
 #endif
 
+#include "gr/algorithms/AbstractMatchBase.h"
 #include "gr/utils/shared.h"
 #include "gr/utils/sampling.h"
 #include "gr/accelerators/kdtree.h"
@@ -62,43 +63,15 @@
 
 namespace gr{
 
-struct DummyTransformVisitor {
-    template <typename Derived>
-    inline void operator() (float, float, const Eigen::MatrixBase<Derived>&) const {}
-    constexpr bool needsGlobalTransformation() const { return false; }
-};
-
-/// \brief Abstract class for registration algorithms
-template <typename PointType, typename _TransformVisitor = DummyTransformVisitor,
-          template < class, class > class ... OptExts>
-class MatchBase {
-
-public:
-    using Scalar = typename PointType::Scalar;
-    using VectorType = typename PointType::VectorType;
-    using MatrixType = Eigen::Matrix<Scalar, 4, 4>;
-    using LogLevel = Utils::LogLevel;
-    using TransformVisitor = _TransformVisitor;
-
-    template < class Derived, class TBase>
-    class Options : public TBase
+template < class Derived, class TBase>
+    class PairwiseMatchOptions : public TBase
     {
     public:
-        using Scalar = typename PointType::Scalar;
+        using Scalar = typename TBase::Scalar;
 
         /// Distance threshold used to compute the LCP
         /// \todo Move to DistanceMeasure
         Scalar delta       = Scalar(5.0);
-        /// The number of points in the sample. We sample this number of points
-        /// uniformly from P and Q.
-        size_t sample_size = 200;
-        /// Maximum time we allow the computation to take. This makes the algorithm
-        /// an ANY TIME algorithm that can be stopped at any time, producing the best
-        /// solution so far.
-        /// \warning Max. computation time must be handled in child classes
-        int max_time_seconds = 60;
-        /// use a constant default seed by default
-        unsigned int randomSeed = std::mt19937::default_seed;
 
         /// Constraints about transformations
 
@@ -109,32 +82,30 @@ public:
         // \FIXME std::pair <Scalar, Scalar> scale_range;
     };
 
-    using OptionsType = gr::Utils::CRTP < OptExts ... , Options >;
 
-    /// A convenience class used to wrap (any) PointType to allow mutation of position
-    /// of point samples for internal computations.
-    struct PosMutablePoint : public PointType
-    {
-        using VectorType = typename PointType::VectorType;
+/// \brief Abstract class for pairwise registration algorithms
+template   <typename PointType, 
+            typename _TransformVisitor,
+            template < class, class > class ... OptExts>
+class PairwiseMatchBase : public AbstractMatchBase<PointType, _TransformVisitor, OptExts ..., PairwiseMatchOptions> {
 
-        private:
-            VectorType posCopy;
+public:
+    using MatchBaseType = AbstractMatchBase<PointType, _TransformVisitor, OptExts ..., PairwiseMatchOptions>;
 
-        public:
-            template<typename ExternalType>
-            PosMutablePoint(const ExternalType& i)
-                : PointType(i), posCopy(PointType(i).pos()) { }
+    using Scalar = typename MatchBaseType::Scalar;
+    using VectorType = typename MatchBaseType::VectorType;
+    using MatrixType = typename MatchBaseType::MatrixType;
+    using LogLevel = typename MatchBaseType::LogLevel;
+    using OptionsType = typename MatchBaseType::OptionsType;
+    using PosMutablePoint = typename MatchBaseType::PosMutablePoint;
+    using TransformVisitor = _TransformVisitor;
 
-            inline VectorType & pos() { return posCopy; }
-
-            inline VectorType pos() const { return posCopy; }
-    };
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    MatchBase(const OptionsType& options, const Utils::Logger &logger);
+    PairwiseMatchBase(const OptionsType& options, const Utils::Logger &logger);
 
-    virtual ~MatchBase();
+    virtual ~PairwiseMatchBase();
 
     /// Read access to the sampled clouds used for the registration
     const std::vector<PosMutablePoint>& getFirstSampled() const {
@@ -204,18 +175,11 @@ protected:
     /// KdTree used to compute the LCP
     KdTree<Scalar> kd_tree_;
     std::mt19937 randomGenerator_;
-    const Utils::Logger &logger_;
-
-    OptionsType options_;
 
     /// \todo Rationnalize use and name of this variable
     static constexpr int kNumberOfDiameterTrials = 1000;
 
 protected :
-    template <Utils::LogLevel level, typename...Args>
-    inline void Log(Args...args) const { logger_.Log<level>(args...); }
-
-
     /// Computes the mean distance between points in Q and their nearest neighbor.
     /// We need this for normalization of the user delta (See the paper) to the
     /// "scale" of the set.
@@ -271,8 +235,8 @@ private:
 
     void initKdTree();
 
-}; /// class MatchBase
+}; /// class PairwiseMatchBase
 } /// namespace gr
-#include "matchBase.hpp"
+#include "PairwiseMatchBase.hpp"
 
-#endif // _OPENGR_ALGO_MATCH_BASE_
+#endif // _OPENGR_ALGO_PAIRWISE_MATCH_BASE_

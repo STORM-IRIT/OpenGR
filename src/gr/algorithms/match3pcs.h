@@ -9,7 +9,7 @@
 #include "gr/utils/shared.h"
 #include "gr/utils/sampling.h"
 #include "gr/algorithms/congruentSetExplorationBase.h"
-#include "matchBase.h"
+#include "PairwiseMatchBase.h"
 
 #ifdef TEST_GLOBAL_TIMINGS
 #   include "gr/utils/timer.h"
@@ -29,9 +29,9 @@ namespace gr {
               typename _TransformVisitor,
               typename _PairFilteringFunctor,  /// <\brief Must implements PairFilterConcept
               template < class, class > class PairFilteringOptions >
-    class Match3pcs : public CongruentSetExplorationBase<Traits3pcs<typename MatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint>, _PointType, _TransformVisitor, _PairFilteringFunctor, PairFilteringOptions> {
+    class Match3pcs : public CongruentSetExplorationBase<Traits3pcs<typename PairwiseMatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint>, _PointType, _TransformVisitor, _PairFilteringFunctor, PairFilteringOptions> {
     public:
-      using PosMutablePoint      = typename MatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint;
+      using PosMutablePoint      = typename PairwiseMatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint;
       using Traits               = Traits3pcs<PosMutablePoint>;
       using PairFilteringFunctor = _PairFilteringFunctor;
       using TransformVisitor     = _TransformVisitor;

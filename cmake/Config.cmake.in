@@ -23,6 +23,11 @@ if(@OpenGR_USE_CHEALPIX@)
   include("@OpenGR_EXPORT_TARGET_DIR@/chealpixTargets.cmake")
 endif(@OpenGR_USE_CHEALPIX@)
 
+find_package(SDPA QUIET)
+set(OpenGR_USE_SDPA ${SDPA_FOUND})
+
+find_package(MOSEK QUIET)
+set(OpenGR_USE_MOSEK ${MOSEK_FOUND})
 
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-AccelLibTargets.cmake")
 include("@OpenGR_EXPORT_TARGET_DIR@/OpenGR-AlgoLibTargets.cmake")

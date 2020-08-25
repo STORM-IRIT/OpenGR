@@ -2,7 +2,7 @@
 // Created by Sandra Alfaro on 31/05/18.
 //
 
-#include <gr/algorithms/matchBase.h>
+#include "gr/algorithms/PairwiseMatchBase.h"
 #include <gr/algorithms/match3pcs.h>
 #include <gr/algorithms/PointPairFilter.h>
 #include "gr/io/io.h"

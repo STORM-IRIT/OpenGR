@@ -10,6 +10,8 @@ OPTION (OpenGR_COMPILE_APPS "Compile demo applications (including the Super4PCS 
 OPTION (IO_USE_BOOST "Use boost::filesystem for texture loading" TRUE)
 OPTION (ENABLE_TIMING "Enable computation time recording" FALSE)
 OPTION (OpenGR_USE_CHEALPIX "Use Chealpix for orientation filtering (deprecated)" FALSE)
+OPTION (OpenGR_USE_SDPA "Use SDPA solvers (used for N-Ary registration only)" FALSE)
+OPTION (OpenGR_USE_MOSEK "Use MOSEK solvers (used for N-Ary registration only)" FALSE)
 OPTION (DL_DATASETS "Download demo datasets and associated run scripts" FALSE)
 OPTION (OpenGR_USE_WEIGHTED_LCP "Use gaussian weights for point samples when computing LCP" FALSE)
 
@@ -88,6 +90,14 @@ endif (DL_DATASETS)
 if(OpenGR_USE_CHEALPIX)
     include(cmake/ConfigureChealpix.cmake)
 endif(OpenGR_USE_CHEALPIX)
+
+if(OpenGR_USE_SDPA)
+    find_package(SDPA REQUIRED)
+endif(OpenGR_USE_SDPA)
+
+if(OpenGR_USE_MOSEK)
+    find_package(MOSEK REQUIRED)
+endif(OpenGR_USE_MOSEK)
 
 ## Eigen: automatic configuration:
 ##  1. if EIGEN3_INCLUDE_DIR is set, use it directly
@@ -309,5 +319,10 @@ install(DIRECTORY ${SRC_DIR}/
 #   * <prefix>/lib/cmake/Foo/FooConfigVersion.cmake
 install(
     FILES "${project_config}" "${version_config}"
+    DESTINATION "${config_install_dir}"
+)
+
+install(
+    FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindSDPA.cmake"
     DESTINATION "${config_install_dir}"
 )

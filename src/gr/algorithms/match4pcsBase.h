@@ -37,11 +37,11 @@ namespace gr {
               typename _TransformVisitor,
               typename _PairFilteringFunctor,  /// <\brief Must implements PairFilterConcept
               template < class, class > class PairFilteringOptions >
-    class Match4pcsBase : public CongruentSetExplorationBase<Traits4pcs<typename MatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint>, _PointType, _TransformVisitor, _PairFilteringFunctor, PairFilteringOptions> {
+    class Match4pcsBase : public CongruentSetExplorationBase<Traits4pcs<typename PairwiseMatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint>, _PointType, _TransformVisitor, _PairFilteringFunctor, PairFilteringOptions> {
     public:
         using Scalar            = typename _PointType::Scalar;
         using PairFilteringFunctor = _PairFilteringFunctor;
-        using PosMutablePoint   = typename MatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint;
+        using PosMutablePoint   = typename PairwiseMatchBase<_PointType, _TransformVisitor, PairFilteringOptions, CongruentSetExplorationOptions>::PosMutablePoint;
         using MatchBaseType     = CongruentSetExplorationBase<Traits4pcs<PosMutablePoint>, _PointType, _TransformVisitor, _PairFilteringFunctor, PairFilteringOptions>;
         using VectorType        = typename MatchBaseType::VectorType;
         using MatrixType        = typename MatchBaseType::MatrixType;

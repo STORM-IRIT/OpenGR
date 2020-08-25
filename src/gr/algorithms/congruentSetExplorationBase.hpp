@@ -32,7 +32,7 @@ namespace internal {
 
 template <typename Traits, typename PointType, typename TransformVisitor,
           typename PairFilteringFunctor,
-          template < class, class > typename ... OptExts >
+          template < class, class > class ... OptExts >
   CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFunctor, OptExts ...>::CongruentSetExplorationBase(
           const typename CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFunctor, OptExts ...>::OptionsType& options
         , const Utils::Logger& logger )

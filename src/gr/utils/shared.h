@@ -106,6 +106,8 @@ class Point3D
   inline const VectorType& pos() const { return pos_ ; }
   inline const VectorType& rgb() const { return rgb_; }
 
+  static constexpr int dim() { return 3; }
+
   inline const VectorType& normal() const { return normal_; }
   inline void set_rgb(const VectorType& rgb) {
       rgb_ = rgb;
@@ -138,8 +140,7 @@ class Point3D
   VectorType rgb_   { Scalar(-1.0f), Scalar(-1.0f), Scalar(-1.0f) };
 };
 
-
-//// ----- MatchBase Options -----
+//// ----- PairwiseMatchBase Options -----
 ///// delta and overlap_estimation are the application parameters. All other
 ///// parameters are more likely to keep fixed and they can be set via the setters.
 //    struct MatchOptions {

@@ -12,8 +12,11 @@ set(accel_relative_INCLUDE
     ${accel_ROOT}/pairExtraction/intersectionPrimitive.h
     ${accel_ROOT}/normalset.h
     ${accel_ROOT}/normalset.hpp
-    ${accel_ROOT}/utils.h)
-
+    ${accel_ROOT}/normalset.hpp
+    ${accel_ROOT}/utils.h
+    ${accel_ROOT}/gret_sdp/wrappers.h
+    ${accel_ROOT}/gret_sdp/SDPAWrapper.h
+    ${accel_ROOT}/gret_sdp/MOSEKWrapper.h)
 
 if(OpenGR_USE_CHEALPIX)
     include_directories(${Chealpix_INCLUDE_DIR})

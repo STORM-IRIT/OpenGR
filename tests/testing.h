@@ -58,7 +58,7 @@
 #include <ctime>
 
 #include "gr/utils/shared.h"
-#include "gr/algorithms/matchBase.h"
+#include "gr/algorithms/PairwiseMatchBase.h"
 
 #define DEFAULT_REPEAT 10
 

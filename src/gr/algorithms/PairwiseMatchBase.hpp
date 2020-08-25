@@ -11,34 +11,35 @@
 #include <omp.h>
 #endif
 
-#include "gr/algorithms/matchBase.h"
+#include "gr/algorithms/PairwiseMatchBase.h"
 
 #ifdef TEST_GLOBAL_TIMINGS
 #   include "gr/utils/timer.h"
 #endif
 
 
-#define MATCH_BASE_TYPE MatchBase<PointType, TransformVisitor, OptExts ... >
-
 
 namespace gr {
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
-MATCH_BASE_TYPE::MatchBase(const typename MATCH_BASE_TYPE::OptionsType &options,
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::PairwiseMatchBase(const typename PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::OptionsType &options,
                       const Utils::Logger& logger
                        )
-    : randomGenerator_(options.randomSeed)
-    , logger_(logger)
-    , options_(options)
+    : MatchBaseType(options, logger)
 {}
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
-MATCH_BASE_TYPE::~MatchBase(){}
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::~PairwiseMatchBase(){}
 
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
-typename MATCH_BASE_TYPE::Scalar
-MATCH_BASE_TYPE::MeanDistance() const {
+typename PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::Scalar
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::MeanDistance() const {
     const Scalar kDiameterFraction = 0.2;
     using RangeQuery = typename gr::KdTree<Scalar>::template RangeQuery<>;
 
@@ -64,7 +65,8 @@ MATCH_BASE_TYPE::MeanDistance() const {
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
 bool
-MATCH_BASE_TYPE::SelectRandomTriangle(Scalar max_base_diameter, int &base1, int &base2, int &base3) {
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::SelectRandomTriangle(Scalar max_base_diameter, int &base1, int &base2, int &base3) {
     int number_of_points = sampled_P_3D_.size();
     base1 = base2 = base3 = -1;
 
@@ -102,7 +104,8 @@ MATCH_BASE_TYPE::SelectRandomTriangle(Scalar max_base_diameter, int &base1, int 
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
 void
-MATCH_BASE_TYPE::initKdTree(){
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::initKdTree(){
     size_t number_of_points = sampled_P_3D_.size();
 
     // Build the kdtree.
@@ -118,7 +121,8 @@ MATCH_BASE_TYPE::initKdTree(){
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
 template <typename Coordinates>
 bool
-MATCH_BASE_TYPE::ComputeRigidTransformation(const Coordinates& ref,
+PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::ComputeRigidTransformation(const Coordinates& ref,
         const Coordinates& candidate,
         const Eigen::Matrix<Scalar, 3, 1>& centroid1,
         Eigen::Matrix<Scalar, 3, 1> centroid2,
@@ -210,8 +214,8 @@ MATCH_BASE_TYPE::ComputeRigidTransformation(const Coordinates& ref,
 
     //Filter transformations.
     // \fixme Need to consider max_translation_distance and max_scale too
-    if (options_.max_angle >= 0) {
-        Scalar mangle = options_.max_angle * pi / 180.0;
+    if (MatchBaseType::options_.max_angle >= 0) {
+        Scalar mangle = MatchBaseType::options_.max_angle * pi / 180.0;
         // Discard too large solutions (todo: lazy evaluation during boolean computation
         if (! (
                     std::abs(std::atan2(rotation(2, 1), rotation(2, 2)))
@@ -258,7 +262,8 @@ MATCH_BASE_TYPE::ComputeRigidTransformation(const Coordinates& ref,
 
 template <typename PointType, typename TransformVisitor, template < class, class > class ... OptExts>
 template <typename InputRange1, typename InputRange2, template<typename> class Sampler>
-void MATCH_BASE_TYPE::init(const InputRange1& P,
+void PairwiseMatchBase<PointType, TransformVisitor, OptExts ... >
+::init(const InputRange1& P,
               const InputRange2& Q,
               const Sampler<PointType>& sampler) {
 
@@ -269,29 +274,29 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
     sampled_Q_3D_.clear();
 
     // prepare P
-    if (P.size() > options_.sample_size){
+    if (P.size() > MatchBaseType::options_.sample_size){
         std::vector<typename InputRange1::value_type > sampled_P_3D;
 
-        sampler(P, options_, sampled_P_3D_);
+        sampler(P, MatchBaseType::options_, sampled_P_3D_);
     }
     else
     {
-        Log<LogLevel::ErrorReport>( "(P) More samples requested than available: use whole cloud" );
+        MatchBaseType::template Log<LogLevel::ErrorReport>( "(P) More samples requested than available: use whole cloud" );
 
         // copy all the points
         std::copy(P.begin(), P.end(), std::back_inserter(sampled_P_3D_));
     }
 
     // prepare Q
-    if (Q.size() > options_.sample_size){
+    if (Q.size() > MatchBaseType::options_.sample_size){
         std::vector<typename InputRange2::value_type> uniform_Q, sampled_Q_3D;
 
-        sampler(Q, options_, uniform_Q);
+        sampler(Q, MatchBaseType::options_, uniform_Q);
 
         std::vector<int> indices(uniform_Q.size());
         std::iota( std::begin(indices), std::end(indices), 0 );
         std::shuffle(indices.begin(), indices.end(), randomGenerator_);
-        size_t nbSamples = std::min(uniform_Q.size(), options_.sample_size);
+        size_t nbSamples = std::min(uniform_Q.size(), MatchBaseType::options_.sample_size);
         indices.resize(nbSamples);
 
         // using the indices, copy elements from uniform_Q to sampled_P_3D_
@@ -302,7 +307,7 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
     }
     else
     {
-        Log<LogLevel::ErrorReport>( "(Q) More samples requested than available: use whole cloud" );
+        MatchBaseType::template Log<LogLevel::ErrorReport>( "(Q) More samples requested than available: use whole cloud" );
 
         // copy all the points
         std::copy(Q.begin(), Q.end(), std::back_inserter(sampled_Q_3D_));
@@ -348,4 +353,5 @@ void MATCH_BASE_TYPE::init(const InputRange1& P,
 
 } // namespace gr
 
-#undef MATCH_BASE_TYPE
+
+
