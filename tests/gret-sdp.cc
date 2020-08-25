@@ -27,6 +27,7 @@
 #include "gr/algorithms/GRET_SDP.h"
 #include "gr/utils/timer.h"
 #include "gr/accelerators/kdtree.h"
+#include "gr/io/io.h"
 
 
 #include <Eigen/Dense>
@@ -55,96 +56,110 @@ enum {Dim = PointType::dim()};
 using MatrixType = Eigen::Matrix<Scalar, Dim+1, Dim+1>;
 using VectorType = Eigen::Matrix<Scalar, Dim, 1>;
 using MatrixX = typename Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic>;
-using PatchType = vector<pair<PointType, int>>;
+using Pwi = pair<PointType, int>;
+using PwiRange = vector<Pwi>;
+using PointRange = vector<PointType>;
+typedef Eigen::Transform<Scalar, Dim, Eigen::Affine> Transform;
 
 constexpr Utils::LogLevel loglvl = Utils::Verbose;
 Utils::Logger logger(loglvl);
 
-struct RegistrationProblem {
-    int n;
-    int m;
-    int d;
-    vector<PatchType> patches;
+constexpr int max_num_point_clouds = 5;
+
+struct SamplingOptions {
+    double delta = 0.01;
+    SamplingOptions() {};
+    SamplingOptions(double delta_) : delta(delta_) {} ;
 };
 
-template <typename PatchRange>
-void readPatch(const string& file, PatchRange& patch){
-    int num_points;
-    fs::ifstream file_stream(file);
-    file_stream >> num_points;
-    patch.reserve(num_points);
+// extracts point clouds and transformations from a stanford config file
+void extractPCAndTrFromStandfordConfFile(
+        const std::string &confFilePath,
+        std::vector<Transform>& transforms,
+        std::vector<PointRange>& point_clouds
+        ){
+    using namespace boost;
+    using namespace std;
 
-    VectorType vec;
-    int index;
-    while(file_stream >> index){
-        for(int i = 0; i < Dim; i++)
-            file_stream >> vec(i);
-        patch.emplace_back(PointType(vec), index);
-  }
-}
 
-void readTransformation(const string& filePath, MatrixType& trafo){
-    int rows, cols;
-    fs::ifstream file(filePath);
-    if(file.is_open()){
-        file >> rows >> cols;
-        if(cols != Dim+1 || rows != Dim+1)
-            throw std::runtime_error("matrices have to be of size " + to_string(Dim+1) + "x" + to_string(Dim+1));
-        for(int i = 0; i < cols; i++)
-            for (int j = 0; j < rows; j++)
-                file >> trafo(i, j);
-    }
-}
-
-template <typename TrRange>
-void extractPatchesAndTrFromConfigFile(const string& configFilePath,  RegistrationProblem& problem, TrRange& transformations){
-    const string workingDir = fs::path(configFilePath).parent_path().native();
-
-    pt::ptree root;
-    pt::read_json(configFilePath, root);
-
-    int n = root.get<int>("n");
-    int m = root.get<int>("m");
-    int d = root.get<int>("d");
-
-    problem.n = n;
-    problem.m = m;
-    problem.d = d;
-
-    vector< string  > patchFiles;
-
-    for (pt::ptree::value_type &item : root.get_child("patches"))
-    {
-        patchFiles.push_back(item.second.data());
-    }
-
-    if(patchFiles.size() != m)
-        throw runtime_error("Number of patches m and number of given patch files is not the same.");
-
-    if(d != Dim)
-        throw runtime_error("Dimension of point type has to be " + to_string(Dim));
-
-    // read patch files
-    problem.patches.resize(m);
-    ifstream patch_file;
-    for(int i = 0; i < m; i++){
-        readPatch(workingDir + "/" + patchFiles[i], problem.patches[i]);
-    }
+    std::vector<string> files;
     
-    vector< string  > transformationFiles;
-    for (pt::ptree::value_type &item : root.get_child("gt_trafos"))
-        transformationFiles.push_back(item.second.data());
+    if(!(filesystem::exists(confFilePath) && filesystem::is_regular_file(confFilePath)))
+      throw std::runtime_error("Config file does not exist or is no regular file.");
 
-    if(transformationFiles.size() != m)
-        throw runtime_error("Number of transformations and number of given transformation files is not the same.");
+    // extract the working directory for the configuration path
+    const std::string workingDir = filesystem::path(confFilePath).parent_path().native();    
+    if(!filesystem::exists(confFilePath))
+      throw std::runtime_error("Directory \"" + workingDir + "\" does not exist.");
 
-    transformations.reserve(m);
-    MatrixType trafo;
-    for(int i = 0; i < m; i++){
-        readTransformation(workingDir + "/" + transformationFiles[i], trafo);
-        transformations.emplace_back(trafo);
+    // read the configuration file and call the matching process
+    std::string line;
+    std::ifstream confFile;
+    confFile.open(confFilePath);
+    if(!confFile.is_open())
+      throw std::runtime_error("Could not open config file.");
+
+    int read_point_clouds = 0;
+    while ( getline (confFile,line) && read_point_clouds < max_num_point_clouds)
+    {
+        std::istringstream iss (line);
+        std::vector<string> tokens{istream_iterator<string>{iss},
+                              istream_iterator<string>{}};
+
+        // here we know that the tokens are:
+        // [0]: keyword, must be bmesh
+        // [1]: 3D object filename
+        // [2-4]: target translation with previous object
+        // [5-8]: target quaternion with previous object
+        
+        if (tokens.size() == 9){
+            if (tokens[0].compare("bmesh") == 0){
+                std::string inputfile = filesystem::path(confFilePath).parent_path().string()+string("/")+tokens[1];
+                if(!(filesystem::exists(inputfile) && filesystem::is_regular_file(inputfile)))
+                  throw std::runtime_error("File \"" + inputfile + "\" does not exist or is no regular file.");
+
+                // build the Eigen rotation matrix from the rotation and translation stored in the files
+                Eigen::Matrix<double, 3, 1> tr (
+                            std::atof(tokens[2].c_str()),
+                            std::atof(tokens[3].c_str()),
+                            std::atof(tokens[4].c_str()));
+
+                Eigen::Quaternion<double> quat(
+                            std::atof(tokens[8].c_str()), // eigen starts by w
+                            std::atof(tokens[5].c_str()),
+                            std::atof(tokens[6].c_str()),
+                            std::atof(tokens[7].c_str()));
+
+                quat.normalize();
+
+                Transform transform (Transform::Identity());
+                transform.rotate(quat);
+                transform.translate(-tr);
+
+                transforms.push_back(transform);
+                files.push_back(inputfile);
+                
+                read_point_clouds++;
+            }
+        }
     }
+    confFile.close();
 
+    std::ifstream pc_file;
+    int num_point_clouds = files.size();
+    point_clouds.resize(num_point_clouds);
+
+    vector<Eigen::Matrix2f> tex_coords;
+    vector<VectorType> normals;
+    vector<tripple> tris;
+    vector<string> mtls;
+
+    IOManager iomanager;
+    for(int i = 0; i < num_point_clouds; i++){
+        const string& file = files[i];
+         if(!iomanager.ReadObject((char *)file.c_str(), point_clouds[i], tex_coords, normals, tris, mtls) )
+            throw std::runtime_error("Couldn't read ply file \"" + file + "\"");
+    }
 }
 
 template <typename PointRange>
@@ -159,6 +174,51 @@ gr::KdTree<Scalar> constructKdTree(const PointRange& Q){
   kd_tree.finalize();
   return kd_tree;
 }
+
+// computes patches from point_clouds and returns number of global coordinates
+int computePatches(const std::vector<PointRange>& point_clouds, const std::vector<Transform>& transforms, vector<PwiRange>& patches){
+    using PointAdapter = gr::Point3D<Scalar>;
+    UniformDistSampler<PointAdapter> sampler;
+
+    int num_point_clouds = point_clouds.size();
+
+    std::vector<PointRange> transformed_point_clouds(num_point_clouds);
+    PointRange merged_point_cloud;
+    for(size_t i = 0; i < num_point_clouds; i++){
+        for(size_t j = 0; j < point_clouds[i].size(); j++){
+            PointType transformed_point(transforms[i].inverse() * point_clouds[i][j].pos());
+            transformed_point_clouds[i].push_back(transformed_point);
+            merged_point_cloud.push_back(transformed_point);
+        }
+    }
+
+    PointRange sampled_point_cloud;
+    sampler(merged_point_cloud, SamplingOptions(0.01), sampled_point_cloud);
+
+    int num_global_coordinates = sampled_point_cloud.size();
+    using RangeQuery = typename gr::KdTree<Scalar>::template RangeQuery<>;
+    const Scalar max_dist = 0.00001;
+    const Scalar epsilon = 0.001;
+    const Scalar sq_eps = epsilon*epsilon;
+    for(size_t i = 0; i < num_point_clouds; i++){
+        gr::KdTree<Scalar> tree = constructKdTree(transformed_point_clouds[i]);
+        for(int j = 0; j < num_global_coordinates; j++){
+            RangeQuery query;
+            query.queryPoint = sampled_point_cloud[j].pos();
+            query.sqdist     = sq_eps;
+
+            auto result = tree.doQueryRestrictedClosestIndex( query );
+
+            if ( result.first != gr::KdTree<Scalar>::invalidIndex() ) {
+                if( result.second < max_dist )
+                    patches[i].emplace_back(point_clouds[i][result.first], j);
+            }
+        }
+    }
+
+    return num_global_coordinates;
+}
+
 
 template <typename PointRange>
 Scalar compute_lcp( const gr::KdTree<Scalar>& P, const PointRange& Q){
@@ -192,27 +252,26 @@ Scalar compute_lcp( const gr::KdTree<Scalar>& P, const PointRange& Q){
 
 
 int main(int argc, const char **argv) {
-    if(argc != 2){
+    if(argc < 2){
         std::cout << "execute program using: " << "./gret-sdp" << " <config/file/path>" << std::endl;
         return EXIT_FAILURE;
     }
 
     std::string config_file(argv[1]);
 
-
     using MatcherType = GRET_SDP<PointType, DummyTransformVisitor, GRET_SDP_Options>;
     using OptionType  = typename MatcherType::OptionsType;
     OptionType options;
 
-    RegistrationProblem problem;
+    // read points and transformations from file
+    vector<Transform> ground_truth_transformations;
+    vector<PointRange> point_clouds;
+    extractPCAndTrFromStandfordConfFile(config_file, ground_truth_transformations, point_clouds);
 
-    vector<MatrixType> gt_transformations;
-    extractPatchesAndTrFromConfigFile(config_file, problem, gt_transformations);
-
-    const int d = problem.d;
-    const int n = problem.n;
-    const int m = problem.m;
-    const vector<PatchType>& patches = problem.patches;
+    // compute patches
+    int num_point_clouds = point_clouds.size();
+    vector<PwiRange> patches(num_point_clouds);
+    int num_global_coordinates = computePatches(point_clouds, ground_truth_transformations, patches);
 
     MatcherType matcher(options, logger);
 
@@ -229,7 +288,7 @@ int main(int argc, const char **argv) {
 #endif
 
     // register patches
-    matcher.RegisterPatches< WrapperType >(patches, n, tr_visitor);
+    matcher.RegisterPatches< WrapperType >(patches, num_global_coordinates, tr_visitor);
 
     // get transformations and registered patches
     std::vector<MatrixType> transformations;
@@ -238,47 +297,42 @@ int main(int argc, const char **argv) {
     matcher.getRegisteredPatches(registered_patches);
 
     // verify results
-    vector<PointType> reg_transformed_patches;
-    vector<PointType> ori_transformed_patches;
-    int accum_patch_size = 0;
-    for(int i = 0; i < m; i++) accum_patch_size += patches[i].size();
-
-    reg_transformed_patches.reserve(accum_patch_size);
-    ori_transformed_patches.reserve(accum_patch_size);
-
-    VectorType tmp;
-    Eigen::Matrix3d reg_O_0(transformations[0].block(0,0,d,d).transpose());
-    Eigen::Vector3d reg_t_0(transformations[0].block(0,d,d,1));
-    Eigen::Matrix3d ori_O_0(gt_transformations[0].block(0,0,d,d).transpose());
-    Eigen::Vector3d ori_t_0(gt_transformations[0].block(0,d,d,1));
-
-    // computing the transformed patches for reference frame of patch one
-    PointType point;
-    int index;
-    for(int i = 0; i < m; i++){
-        for (const pair<PointType, int>& point_with_index : patches[i])
-        {
-            point = point_with_index.first;
-            index = point_with_index.second;
-            // using computed transformations
-            tmp = (transformations[i]*point.pos().homogeneous()).template head<3>();
-            tmp = reg_O_0 * (tmp - reg_t_0);
-            reg_transformed_patches.emplace_back(PointType(tmp));
-
-            // using ground truth transformations
-            tmp = (gt_transformations[i]*point.pos().homogeneous()).template head<3>();
-            tmp = ori_O_0 * (tmp - ori_t_0);
-            ori_transformed_patches.emplace_back(PointType(tmp));
+    int num_total_points = std::accumulate(point_clouds.begin(), point_clouds.end(), 0, [](int sum, const auto& pc){ return sum + pc.size(); });
+    PointRange registered_points(num_total_points);
+    PointRange merged_points(num_total_points);
+    // transform to common frame
+    for (size_t i = 0; i < point_clouds.size(); i++){
+        for(const auto& point : point_clouds[i]){
+            MatrixType trafo =  ground_truth_transformations[0].inverse().matrix() * transformations[0].inverse() * transformations[i];
+            registered_points.emplace_back(VectorType((trafo * point.pos().homogeneous()).template head<3>()));
+            merged_points.emplace_back(ground_truth_transformations[i].inverse() * point.pos());
         }
-        
     }
 
-    // construct kd_tree
-    gr::KdTree<Scalar> kd_tree(constructKdTree(ori_transformed_patches));
+
+    gr::KdTree<Scalar> tree(constructKdTree(merged_points));
 
     // compute lcp
-    Scalar lcp = compute_lcp(kd_tree, reg_transformed_patches);
+     std::cout << "compute lcp between registered points and ground truth registration" << std::endl;
+    Scalar lcp = compute_lcp(tree, registered_points);
     std::cout << "lcp = " << lcp << std::endl;
+
+#define WRITE_OUTPUT_FILES
+    vector<Eigen::Matrix2f> tex_coords;
+    vector<VectorType> normals;
+    vector<tripple> tris;
+    vector<string> mtls;
+    stringstream iss;
+    iss << "registered_point_clouds.ply";
+    std::cout << "Exporting file " << iss.str().c_str() << "\n";
+    IOManager iomanager;
+    iomanager.WriteObject(iss.str().c_str(),
+                           registered_points,
+                           tex_coords,
+                           normals,
+                           tris,
+                           mtls);
+#define WRITE_OUTPUT_FILES
 
     return EXIT_SUCCESS;
 }

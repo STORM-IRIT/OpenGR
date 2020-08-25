@@ -103,7 +103,7 @@ if (Boost_FOUND)
     add_test(NAME gret-sdp
         #CONFIGURATIONS Release
         COMMAND gret-sdp gret-sdp-data/config.json)
-    target_link_libraries(gret-sdp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils)
+    target_link_libraries(gret-sdp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils  gr::io)
     add_dependencies(gret-sdp copy_gret_sdp_data)
 
     if(OpenGR_USE_SDPA)
