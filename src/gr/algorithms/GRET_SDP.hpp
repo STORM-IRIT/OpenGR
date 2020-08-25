@@ -49,8 +49,9 @@ void GRET_SDP<PointType, TransformVisitor, OptExts ... >::RegisterPatches(const 
     // solve the SDP (P2) using C
     MatrixX G(m*d, m*d);
 
+    
     Solver solver;
-    solver.Solve(C,G,d,m);
+    solver.Solve(C,G,MatchBaseType::logger_,d,m);
 
     // TODO: compute W
     // compute top d eigenvalues and eigenvectors

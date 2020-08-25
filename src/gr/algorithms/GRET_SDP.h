@@ -18,9 +18,7 @@ public:
 
 };
 
-
-/// \brief Base class for Congruent Sec Exploration algorithms
-/// \tparam _Traits Defines properties of the Base used to build the congruent set.
+/// Class for the computation of the GRET-SDP algorithm as described in [this paper]((https://arxiv.org/abs/1306.5226)).
 template <typename _PointType,
           typename _TransformVisitor,
           template < class, class > class ... OptExts >
@@ -49,15 +47,22 @@ public:
 
     inline virtual ~GRET_SDP() {}
 
-    // computes registered points and corresponding transformations
+    /// Computes the global coordinates of patches (subsets of the global coordinates)
+    /// and its corresponding transformations.
+    /// @param [in] patches is a range of point clouds with indexes assigned to each point. The 
+    /// index of a point refers to its corresponding global coordinate.
+    /// @param [in] n number of global coordinates.
     template<typename Solver, typename PatchRange>
     void RegisterPatches(const PatchRange& patches, const int n, TransformVisitor& v);
 
-    // returns registered points
+    /// returns the registered patches
+    /// @param [out] registered_points Range of the registered patches. 
     template<typename PointRange>
     void getRegisteredPatches(PointRange& registered_points);
 
-    // returns transformations
+    /// returns the transformations
+    /// @param [out] transformations Range of transformations that register the patches. 
+    /// the i-th transformation corresponds to the i-th patch in order to register it.
     template<typename TrRange>
     void getTransformations(TrRange& transformations);
 

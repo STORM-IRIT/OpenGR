@@ -45,8 +45,6 @@ public:
     virtual inline ~NAryMatchBase() {}
 
     protected:
-    /// vector of the transformations
-    std::vector<Eigen::Matrix<Scalar, 4, 4>> transforms_;
 
 }; /// class NAryMatchBase
 } /// namespace gr

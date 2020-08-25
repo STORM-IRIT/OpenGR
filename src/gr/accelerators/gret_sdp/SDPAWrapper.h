@@ -3,6 +3,9 @@
 
 #include <Eigen/Dense>
 #include <sdpa_call.h>
+#include <cstdio>
+
+#include <gr/utils/logger.h>
 
 namespace gr{
 
@@ -12,15 +15,25 @@ namespace gr{
     public:
         using MatrixX = typename Eigen::Matrix<Scalar_, Eigen::Dynamic, Eigen::Dynamic>;
 
-        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m);
+        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const Utils::Logger& logger, const int d, const int m);
+
+    private:
+        void LogResults(SDPA& Problem);
     };
-    
+
+    /// Computes the SDP (P2) as described in [this paper]((https://arxiv.org/abs/1306.5226)).
+    /// P2: min(Tr(CG)) subject to G >= 0, G_ii = I_d (1<=i<=m).
+    /// @param [in] C "patch-stress" matrix.
+    /// @param [in] d Dimension.
+    /// @param [in] m Number of patches.
+    /// @param [out] G Solution of the SDP (P2)
     template <typename Scalar_>
-    void SDPA_WRAPPER<Scalar_>::Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m){
+    void SDPA_WRAPPER<Scalar_>::Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const Utils::Logger& logger, const int d, const int m){
         SDPA	Problem;
 
         // All parameteres are renewed
         Problem.setParameterType(SDPA::PARAMETER_STABLE_BUT_SLOW);
+        Problem.printParameters(stdout);
 
         int mDIM   = d*(d+1)/2*m;
         int nBlock = 1;
@@ -60,10 +73,32 @@ namespace gr{
         Problem.initializeSolve();
         Problem.solve();
 
+        if(logger.logLevel() == Utils::LogLevel::Verbose)
+            LogResults(Problem);
+
 
         double* yMat = Problem.getResultYMat(1);
         Eigen::Map<Eigen::MatrixXd> Gmap(yMat, d*m, d*m);
         G = Gmap;
+    }
+
+
+    template <typename Scalar_>
+    void SDPA_WRAPPER<Scalar_>::LogResults(SDPA& Problem){
+
+        fprintf(stdout, "\nStop iteration = %d\n",
+            Problem.getIteration());
+        char phase_string[30];
+        Problem.getPhaseString(phase_string);
+        fprintf(stdout, "Phase          = %s\n", phase_string);
+        fprintf(stdout, "objValPrimal   = %+10.6e\n",
+            Problem.getPrimalObj());
+        fprintf(stdout, "objValDual     = %+10.6e\n",
+            Problem.getDualObj());
+        fprintf(stdout, "p. feas. error = %+10.6e\n",
+            Problem.getPrimalError());
+        fprintf(stdout, "d. feas. error = %+10.6e\n\n",
+            Problem.getDualError());
     }
 
 }

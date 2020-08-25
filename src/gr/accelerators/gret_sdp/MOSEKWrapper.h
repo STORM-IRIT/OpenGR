@@ -4,6 +4,8 @@
 #include <Eigen/Dense>
 #include <fusion.h>
 
+#include <gr/utils/logger.h>
+
 namespace gr{
 
     template <typename Scalar_>
@@ -12,11 +14,17 @@ namespace gr{
     public:
         using MatrixX = typename Eigen::Matrix<Scalar_, Eigen::Dynamic, Eigen::Dynamic>;
 
-        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m);
+        void Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const Utils::Logger& logger, const int d, const int m);
     };
     
+    /// Computes the SDP (P2) as described in [this paper]((https://arxiv.org/abs/1306.5226)).
+    /// P2: min(Tr(CG)) subject to G >= 0, G_ii = I_d (1<=i<=m).
+    /// @param [in] C "patch-stress" matrix.
+    /// @param [in] d Dimension.
+    /// @param [in] m Number of patches.
+    /// @param [out] G Solution of the SDP (P2)
     template <typename Scalar>
-    void MOSEK_WRAPPER<Scalar>::Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const int d, const int m){
+    void MOSEK_WRAPPER<Scalar>::Solve(Eigen::Ref<const MatrixX> C, Eigen::Ref<MatrixX> G, const Utils::Logger& logger, int d, const int m){
         using namespace mosek::fusion;
         using namespace monty;
 
@@ -26,7 +34,8 @@ namespace gr{
         std::copy(C.data(), C.data()+C.size(), c_ptr->begin());
         Matrix::t C_ = Matrix::dense(c_ptr);
 
-        M->setLogHandler([ = ](const std::string & msg) { std::cout << msg << std::flush; } );
+        if(logger.logLevel() == Utils::LogLevel::Verbose)
+            M->setLogHandler([ = ](const std::string & msg) { std::cout << msg << std::flush; } );
 
         auto G_ = M->variable(Domain::inPSDCone(m*d));
 
