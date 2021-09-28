@@ -1,5 +1,0 @@
-build*/
-*.user
-assets/demo*
-.vscode/*
-*.orig
