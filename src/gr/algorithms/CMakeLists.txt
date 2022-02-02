@@ -1,16 +1,35 @@
 project (OpenGR-AlgoLib)
 
-set(algo_ROOT "${SRC_DIR}/gr/algorithms")
+set(algo_files  AbstractMatchBase.h
+                Functor4pcs.h
+                FunctorBrute4pcs.h
+                FunctorSuper4pcs.h
+                NAryMatchBase.h
+                PairwiseMatchBase.h
+                PairwiseMatchBase.hpp
+                PointPairFilter.h
+                congruentSetExplorationBase.h
+                congruentSetExplorationBase.hpp
+                match3pcs.h
+                match3pcs.hpp
+                match4pcsBase.h
+                match4pcsBase.hpp
+                pairCreationFunctor.h
+        )
 
-file(GLOB_RECURSE algo_relative_INCLUDE ${algo_ROOT}/*.h ${algo_ROOT}/*.hpp)
+if(OpenGR_USE_EXPERIMENTAL_FEATURES)
+    set(APPEND algo_files
+            experimental/GRET_SDP.h
+            experimental/GRET_SDP.hpp
+            )
+endif()
 
 # compute accel_INCLUDE to get absolute filenames
 set(algo_INCLUDE "")
 set(algo_installed_INCLUDE "")
-foreach(f ${algo_relative_INCLUDE})
-    list(APPEND algo_INCLUDE "${f}")
-    file(RELATIVE_PATH f_relative "${SRC_DIR}" "${f}")
-    list(APPEND algo_installed_INCLUDE "include/${f_relative}")
+foreach(f ${algo_files})
+    list(APPEND algo_installed_INCLUDE "include/gr/algorithms/${f}")
+    list(APPEND algo_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/${f}")
 endforeach(f)
 
 add_library(algo INTERFACE)

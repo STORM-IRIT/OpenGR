@@ -12,10 +12,15 @@ OPTION (OpenGR_COMPILE_TESTS "Enable testing" TRUE)
 OPTION (OpenGR_COMPILE_APPS "Compile demo applications (including the Super4PCS standalone)" TRUE)
 OPTION (ENABLE_TIMING "Enable computation time recording" FALSE)
 OPTION (OpenGR_USE_CHEALPIX "Use Chealpix for orientation filtering (deprecated)" FALSE)
-OPTION (OpenGR_USE_SDPA "Use SDPA solvers (used for N-Ary registration only)" FALSE)
-OPTION (OpenGR_USE_MOSEK "Use MOSEK solvers (used for N-Ary registration only)" FALSE)
 OPTION (DL_DATASETS "Download demo datasets and associated run scripts" FALSE)
 OPTION (OpenGR_USE_WEIGHTED_LCP "Use gaussian weights for point samples when computing LCP" FALSE)
+OPTION (OpenGR_USE_EXPERIMENTAL_FEATURES "Enable experimental features" FALSE)
+
+if(OpenGR_USE_EXPERIMENTAL_FEATURES)
+    OPTION (OpenGR_USE_SDPA "Use SDPA solvers (used for N-Ary registration only)" FALSE)
+    OPTION (OpenGR_USE_MOSEK "Use MOSEK solvers (used for N-Ary registration only)" FALSE)
+    message (STATUS "Enabling Experimental Features")
+endif(OpenGR_USE_EXPERIMENTAL_FEATURES)
 
 ################################################################################
 ## DO NOT EDIT AFTER THIS LINE

@@ -23,8 +23,8 @@
 // This test is part of the implementation of the Super 4-points Congruent Sets
 // (Super 4PCS) algorithm presented in:
 
-#include "gr/accelerators/gret_sdp/wrappers.h"
-#include "gr/algorithms/GRET_SDP.h"
+#include "gr/accelerators/experimental/gret_sdp/wrappers.h"
+#include "gr/algorithms/experimental/GRET_SDP.h"
 #include "gr/utils/timer.h"
 #include "gr/accelerators/kdtree.h"
 #include "gr/io/io.h"

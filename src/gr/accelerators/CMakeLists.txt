@@ -14,9 +14,15 @@ set(accel_relative_INCLUDE
     ${accel_ROOT}/normalset.hpp
     ${accel_ROOT}/normalset.hpp
     ${accel_ROOT}/utils.h
-    ${accel_ROOT}/gret_sdp/wrappers.h
-    ${accel_ROOT}/gret_sdp/SDPAWrapper.h
-    ${accel_ROOT}/gret_sdp/MOSEKWrapper.h)
+        )
+
+if(OpenGR_USE_EXPERIMENTAL_FEATURES)
+    set(APPEND accel_relative_INCLUDE
+            ${accel_ROOT}/experimental/gret_sdp/wrappers.h
+            ${accel_ROOT}/experimental/gret_sdp/SDPAWrapper.h
+            ${accel_ROOT}/experimental/gret_sdp/MOSEKWrapper.h
+            )
+endif()
 
 if(OpenGR_USE_CHEALPIX)
     include_directories(${Chealpix_INCLUDE_DIR})
