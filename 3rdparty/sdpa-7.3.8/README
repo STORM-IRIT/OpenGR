@@ -1,0 +1,60 @@
+SDPA (SemiDefinite Programming Algorithm)
+High-performance software package for SemiDefinite Programs
+
+Copyright (C) 1995-2012 SDPA Project
+
+"SDPA (SemiDefinite Programming Algorithm)" is one of the most
+efficient and stable software packages for solving SDPs based on the
+primal-dual interior-point method.
+SDP (SemiDefinite Programs) is used for
+financial engineering, machine learning, control theory,
+sensor network problem, quantum chemistry, quantum information,
+combinatorial optimizaiton, polynomial optimization, and so on.
+
+If you have questions on the installation,
+please contact us from
+http://sdpa.sourceforge.net/contact.html
+
+More information can be found at
+[1] http://sdpa.sourceforge.net/contact.html
+    About SDP (SemiDefinite Programs)
+          and User Manual
+    About SDPA and SDPA family
+
+[2] File 'INSTALL'
+    To install SDPA by the three steps
+    ./configure && make && make install
+
+
+The following is same as a part of debian/README in debian package.
+
+===============================================================
+"SDPA (SemiDefinite Programming Algorithm)" is one of the most
+efficient and stable software packages for solving SDPs based on the
+primal-dual interior-point method.
+SDP (SemiDefinite Programs) is used for
+financial engineering, machine learning, control theory,
+sensor network problem, quantum chemistry, quantum information,
+combinatorial optimizaiton, polynomial optimization, and so on.
+
+The user-manual of SDPA is available at
+https://sourceforge.net/projects/sdpa/files/sdpa/sdpa.7.1.1.manual.20080618.pdf/download
+
+Note for numerical evaluations:
+SDPA debian package is usually linked with openblas-base package.
+This openblas-base package might not be optimized for your processor.
+To report computation time of SDPA in some article, you should 
+install optimized BLAS and compile SDPA from its source code.
+
+SDPA-M:
+ The user-manual of SDPA-M is available at 
+  https://sourceforge.net/projects/sdpa/files/sdpa-m/sdpamManual.pdf/download
+ To compile the mex files with Matlab,
+ $ cp -r /usr/share/sdpa/mex .
+ $ cd mex
+ $ make MAKE_INCLUDE_DIR=/usr/share/sdpa/
+ To compile the mex files with Octave,
+ $ cp -r /usr/share/sdpa/mex .
+ $ cd mex
+ $ make MAKE_INCLUDE_DIR=/usr/share/sdpa/ COMPILE_ENVIRONMENT=octave
+

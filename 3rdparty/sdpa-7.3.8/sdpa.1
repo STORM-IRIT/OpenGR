@@ -1,0 +1,125 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH SDPA 1 "July 28, 2011"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+SDPA \- High-performance software package for SemiDefinite Programs 
+.SH SYNOPSIS
+.br
+.B sdpa
+.RB DataFile 
+.RB OutputFile 
+.RB [ \| InitialPtFile \| ] 
+.RB [ \| \-pt  
+.IR parameters \| ] 
+.RB [ \| \-dimacs \| ] 
+.RB [ \| \-numThreads 
+.IR \ numThreads \|]
+.br
+.B sdpa
+.RI [ options ] " files" ...
+.br
+.B sdpa
+.RI --version
+
+.SH DESCRIPTION
+.B sdpa 
+\- "SDPA (SemiDefinite Programming Algorithm)" is one of the most
+efficient and stable software packages for solving SDPs based on the
+primal-dual interior-point method.
+
+SDP (SemiDefinite Program) is used for
+financial engineering, machine learning, control theory,
+sensor network problem, quantum chemistry, quantum information,
+combinatorial optimizaiton, polynomial optimization, and so on.
+
+Futher information on SDP and SDPA can be found at
+.br
+.B http://sdpa.sourceforge.net/
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+.SH OPTIONS
+.B \-\-\-\- option type 1 \-\-\-\-
+.br 
+.B sdpa DataFile OutputFile [InitialPtFile] [\-pt parameters] [\-dimacs] [\-numThreads numThreads]
+.br
+parameters = 0 default, 1 fast (unstable), 2 slow (stable)
+.br
+example1\-1: sdpa example1.dat example1.result
+.br
+example1\-2: sdpa example1.dat-s example1.result
+.br
+example1\-3: sdpa example1.dat example1.result example1.ini
+.br
+example1\-4: sdpa example1.dat example1.result \-pt 2
+.br
+example1\-5: sdpa example1.dat example1.result \-dimacs
+.br
+example1\-6: sdpa example1.dat example1.result \-numThreads 4
+.br
+.B \-\-\-\- option type 2 \-\-\-\-
+.br
+.B sdpa [option filename]+ 
+.br
+  \-dd : data dense :: \-ds : data sparse     
+.br
+  \-id : init dense :: \-is : init sparse     
+.br
+  \-o  : output     :: \-p  : parameter       
+.br
+  \-pt : parameters , 0 default, 1 fast (unstable)
+.br
+                     2 slow (stable)         
+.br
+example2\-1: sdpa \-o example1.result \-dd example1.dat
+.br
+example2\-2: sdpa \-ds example1.dat\-s \-o example1.result \-p param.sdpa
+.br
+example2\-3: sdpa \-ds example1.dat\-s \-o example1.result \-pt 2
+.br
+example2\-4: sdpa \-ds example1.dat-s \-o example1.result \-dimacs
+.br
+example2\-5: sdpa \-ds example1.dat-s \-o example1.result \-numThreads 4
+.br
+.br
+.B \-\-\-\- option type 3 \-\-\-\-
+.br
+.B sdpa \-\-version
+.br
+.B    to print out version and exit.
+.br
+.TP 
+.B PARAMETER_FILE 
+is decided by the following priority
+   1: The file assigned by '\-p' option of 'option type 2'.
+       For 'option type1', this is skipped.
+   2: ./param.sdpa
+       For 'option type2', this is skipped.
+   3: /usr/share/sdpa/param.sdpa
+   4: Default parameter
+.TP
+.B \-dimacs
+printout dimacs information incurring additional computation cost
+.TP
+.B \-numThreads
+number of pthreads for internal computation
+.br
+.SH AUTHOR
+SDPA was written by SDPA Project <sdpa\-developers@lists.sourceforge.net>.
+.PP
+This manual page was written by Makoto Yamashita <Makoto.Yamashita@is.titech.ac.jp>.

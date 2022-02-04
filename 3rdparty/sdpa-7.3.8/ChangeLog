@@ -1,0 +1,177 @@
+SDPA 7.3.8 from SDPA 7.3.7 / 2012-04-07 Makoto Yamashita
+	* Fix inside 'index' to 'index2'
+	   in changeIndex of mexReadSDPAToSedumi.cpp
+
+SDPA 7.3.7 from SDPA 7.3.6 / 2012-03-12 Makoto Yamashita
+	* Fix some spell-miss
+	* Modify sdpa.1 to remove the warning hyphen-used-as-minus-sign
+
+SDPA 7.3.6 from SDPA 7.3.5 / 2012-02-01 Makoto Yamashita
+	* Print error messages for reading errors
+	* Fix bugs for some SDPs
+	* Fix some spell-miss
+	* Delete DIMACS_PRINT macro (already replaced by --dimacs option)
+
+SDPA 7.3.5 from SDPA 7.3.4 / 2011-05-06 Makoto Yamashita
+	* Change official homepage to sourceforge
+	* Add option --version
+	* Fix bugs for some SDPs
+	* Remove MUMPS tar.gz file
+
+SDPA 7.3.4 from SDPA 7.3.3 / 2010-12-06 Makoto Yamashita
+	* Change the configure script for mingw envrionment
+
+SDPA 7.3.3 from SDPA 7.3.2 / 2010-11-23 Makoto Yamashita
+	* Change the configure script for MUMPS
+	* Change INSTALL
+	* Fix bugs for some architectures
+	* Change source files for mingw-compatibility
+	* Add some matlab source codes in mex directory
+
+SDPA 7.3.2 from SDPA 7.3.1 / 2010-11-12 Makoto Yamashita
+	* Release Debian package
+
+SDPA 7.3.1 from SDPA 7.3.0 / 2009-07-29 Makoto Yamashita
+	* Introduce multiple threading
+	* Change data structures for input data matrices
+	* Add sedumiwrap.m (SeDuMi wrapper for SDPA-M)
+	  [For details, try 'help sedumiwrap' in Matlab after installation]
+	* Remove small bugs
+
+****************************************************************
+Before git management change log
+****************************************************************
+2008-05-21 Kazuhide Nakata
+
+	* Add correction routin for Sparse Cholesky decomposition
+	* Add "#include <algorithm>" in sdpa_io.cpp
+	* Modify IO::displayDenseLinarSpaceLast
+	* Move "#define P_FORMAT "%+8.3e" from sdpa_struct.cpp to sdpa_struct.h
+
+2008-03-12 Kazuhide Nakata
+
+	* Modify algorithm of preconditioning for moderate sparse SDP
+	    making graph, fill-in, etc. in sdpa_chrdal.cpp
+	    initialization of newton class in sdpa_newton.cpp
+
+2008-02-29 Kazuhide Nakata
+
+	* Initialize block index of SparseLinearSpace without huge array
+		SDP_CNonZeroCount, SDP_ANonZeroCount,
+		SOCP_CNonZeroCount, SOCP_ANonZeroCount,
+		LP_CNonZeroCount, LP_ANonZeroCount.
+
+2008-02-15 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC8. 
+	* Change the order of LAPACK and BLAS libs at configure.
+          It will become a problem when an incomplete 
+          liblapack.a exists at the BLAS directory (usually
+          caused by the normal ATLAS installation).
+
+2008-02-13 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC7. 
+	* Change archive name and directory to the standard ones.
+	* Add dummy variable in sdpa_io.cpp to workaround gcc-3.3
+	optimization bug.
+        * Parameters are now accord with the manual.
+            PARAMETER_AGGRESSIVE -> PARAMETER_UNSTABLE_BUT_FAST
+	    PARAMETER_STABLE -> PARAMETER_STABLE_BUT_SLOW
+	
+2008-02-09 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC6
+	* Cleanups.
+
+2008-02-08 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC4
+        * the last fix was not included; submmitted by
+          K. Nakata.
+ 
+2008-02-08 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC3
+      	 sdpa_main.cpp:static double KAPPA = 2.2; 
+              ->   static double KAPPA = 7.0; 
+
+2008-02-07 Kazuhide Nakata
+
+        * Support DIMACS errors
+	* SDPA 705 RC2
+
+2008-02-07 Maho Nakata <maho@riken.jp>
+
+	* SDPA 705 RC1.
+
+2008-01-22 Maho Nakata <maho@riken.jp>
+
+	* Pass -O2 -funroll-all-loops to compilers.
+
+2007-12-10 Maho Nakata <maho@riken.jp>
+
+	* Include spooles archive.
+        * Three useMetis to UseMetis (From Kazuhide Nakata).
+        * Disable Metis by default.
+	* Support MacOSX. Tested on MacOSX Tiger Intel & PPC.
+
+2007-11-29 Kazuhide Nakata
+
+	* Support multiple LP block
+	* Remove METIS library
+	* Add check routin in SparseLinearSpace::setElement_SDP, DenseLinearSpace::setElement_SDP
+
+2007-10-16  Kazuhide Nakata
+
+	* Support zero matrix and LP problem
+	* Modify SparseLinearSpace::copyFrom,  SparseLinearSpace::initialize
+	*        workVariables::initialize
+
+2007-09-18  Kazuhide Nakata
+
+        * Modify stopping criteria and step length.
+        * Add SolveInfo::check (print various information of current point)
+
+2007-06-29  Kazuhide Nakata <knakata@me.titech.ac.jp>
+
+        * Modify algorithm in sdpa::UTSpMat::Form_Aggregate.
+        * Fix memory leaks via valgrind.
+        * Change type of variable "LP_NonZeroNumber" from int to bool.
+        * Modify variable names in sdpa::SparseLinearSpace::SparseLinearSpace.
+
+2007-06-27  Maho Nakata <maho@riken.jp>
+
+        * Remove GPL.txt. We have COPYING instead, and it is newer.
+
+2007-06-04  Maho Nakata <maho@riken.jp>
+
+        * Reorder LAPACK/BLAS at linker (submitted by Makoto Yamashita).
+
+2007-06-01  Maho Nakata <maho@riken.jp>
+
+        * Initial support for configure script.
+
+
+/*------------------------------------------
+Major Versions
+SDPA 1 (1995)
+	C++ implementation of the primal-dual
+	interior-point method using the HKM search direction
+SDPA 2 (1996)
+	Implementation of the Mehrotra type predictor- &
+	corrector method
+SDPA 3 (1997)
+	Novel formula to compute the Schur complement matrix
+SDPA 4 (1998)
+	Full implementation of the formula or all
+	block matrices, callable library 
+SDPA 5 (1996)
+	Fast step-size computation using the bisection method
+	to approximate minimum eigenvalues
+SDPA 6 (2002,CodeName Rosemary)
+	Replacing meschach with BLAS/ATLAS and LAPACK
+SDPA 7 (2008,CodeName Margaret)
+	Improvements on sparse sata structures.
+	Multi-Thread computing.
+------------------------------------------*/
