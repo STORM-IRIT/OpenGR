@@ -84,44 +84,36 @@ add_test(NAME externalAppTest
 ## gret-sdp
 
 if(OpenGR_USE_EXPERIMENTAL_FEATURES)
-    find_package(Boost 1.54 COMPONENTS system filesystem  QUIET)
-    if (Boost_FOUND)
-        set(gret-sdp_SRCS gret-sdp.cc)
-        set(GRET_SDP_DATA_DIR_TO ${CMAKE_CURRENT_BINARY_DIR}/gret-sdp-data)
-        set(GRET_SDP_DATA_DIR_FROM ${PROJECT_SOURCE_DIR}/gret-sdp-data)
-        add_custom_target(copy_gret_sdp_data)
-        add_custom_command(TARGET copy_gret_sdp_data
-            POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${GRET_SDP_DATA_DIR_TO}
-            COMMAND ${CMAKE_COMMAND} -E copy ${GRET_SDP_DATA_DIR_FROM}/* ${GRET_SDP_DATA_DIR_TO}/.
-        )
 
-        include_directories(${Boost_INCLUDE_DIRS})
-        add_executable(gret-sdp ${gret-sdp_SRCS} ${testing_SRCS})
-        add_dependencies(buildtests gret-sdp)
-        message(STATUS "[Tests] Adding gret-sdp to testing set")
-        add_test(NAME gret-sdp
-            #CONFIGURATIONS Release
-            COMMAND gret-sdp gret-sdp-data/config.json)
-        target_link_libraries(gret-sdp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} gr::accel gr::algo gr::utils  gr::io)
-        add_dependencies(gret-sdp copy_gret_sdp_data)
+    set(gret-sdp_SRCS gret-sdp.cc)
 
-        if(OpenGR_USE_SDPA)
-            find_package( SDPA )
-            target_link_libraries(gret-sdp ${SDPA_LIBRARIES})
-            target_include_directories(gret-sdp PRIVATE ${SDPA_INCLUDE_DIRS})
-            target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_SDPA)
-        endif(OpenGR_USE_SDPA)
+    add_executable(gret-sdp ${gret-sdp_SRCS} ${testing_SRCS})
+    add_dependencies(buildtests gret-sdp)
+    message(STATUS "[Tests] Adding gret-sdp to testing set")
+    set (gret-sdp_subtests 0 1)
+    foreach(subtest_id ${gret-sdp_subtests})
+        add_test(NAME "gret-sdp_${subtest_id}"
+                #CONFIGURATIONS Release
+                COMMAND gret-sdp ${subtest_id})
+        set_tests_properties ( "gret-sdp_${subtest_id}" PROPERTIES TIMEOUT 600) # in seconds
+    endforeach()
+    target_link_libraries(gret-sdp gr::accel gr::algo gr::utils gr::io ${OpenGRTestsDeps} std::filesystem)
+    target_compile_definitions(gret-sdp PUBLIC -DCXX_FILESYSTEM_HAVE_FS -DCXX_FILESYSTEM_IS_EXPERIMENTAL=$<BOOL:${CXX_FILESYSTEM_IS_EXPERIMENTAL}> -DCXX_FILESYSTEM_NAMESPACE=${CXX_FILESYSTEM_NAMESPACE})
+    add_dependencies(gret-sdp dataset-standford-armadillo dataset-standford-bunny)
 
-        if(OpenGR_USE_MOSEK)
-            find_package( MOSEK )
-            target_link_libraries(gret-sdp ${MOSEK_LIBRARIES})
-            target_include_directories(gret-sdp PRIVATE ${MOSEK_INCLUDE_DIRS})
-            target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_MOSEK)
-        endif(OpenGR_USE_MOSEK)
-    else (Boost_FOUND)
-        message( WARNING "Boost not found, experimental features cannot be found" )
-    endif (Boost_FOUND)
+    if(OpenGR_USE_SDPA)
+        find_package( SDPA )
+        target_link_libraries(gret-sdp ${SDPA_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${SDPA_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_SDPA)
+    endif(OpenGR_USE_SDPA)
+
+    if(OpenGR_USE_MOSEK)
+        find_package( MOSEK )
+        target_link_libraries(gret-sdp ${MOSEK_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${MOSEK_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_MOSEK)
+    endif(OpenGR_USE_MOSEK)
 endif (OpenGR_USE_EXPERIMENTAL_FEATURES)
 
 #############################################

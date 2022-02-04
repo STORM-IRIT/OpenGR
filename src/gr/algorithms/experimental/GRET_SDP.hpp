@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 
 
-#include "gr/algorithms/GRET_SDP.h"
+#include "gr/algorithms/experimental/GRET_SDP.h"
 #include "gr/utils/logger.h"
 namespace gr {
 

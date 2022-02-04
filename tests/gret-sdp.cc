@@ -29,6 +29,14 @@
 #include "gr/accelerators/kdtree.h"
 #include "gr/io/io.h"
 
+#ifndef CXX_FILESYSTEM_HAVE_FS
+#  error std::filesystem is required to compile this file
+#endif
+#if CXX_FILESYSTEM_IS_EXPERIMENTAL
+#  include <experimental/filesystem>
+#else
+#  include <filesystem>
+#endif
 
 #include <Eigen/Dense>
 
@@ -39,16 +47,22 @@
 #include <stdlib.h>
 #include <utility> // pair
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/filesystem.hpp>
-
 #include "testing.h"
 
 using namespace std;
 using namespace gr;
-namespace pt = boost::property_tree;
-namespace fs = boost::filesystem;
+
+const int nbSet = 2;
+
+/*!
+  Datasets and associated parameters
+  In the current state we use a conservative configuration, better timing
+  could be achieved by tuning a bit more the parameters.
+  */
+std::array<std::string, nbSet> confFiles = {
+        "./datasets/bunny/data/bun.conf",
+        "./datasets/armadillo/ArmadilloSide.conf"
+};
 
 using PointType = Point3D<double>;
 using Scalar = PointType::Scalar;
@@ -78,26 +92,22 @@ void extractPCAndTrFromStandfordConfFile(
         std::vector<Transform>& transforms,
         std::vector<PointRange>& point_clouds
         ){
-    using namespace boost;
     using namespace std;
 
 
     std::vector<string> files;
-    
-    if(!(filesystem::exists(confFilePath) && filesystem::is_regular_file(confFilePath)))
-      throw std::runtime_error("Config file does not exist or is no regular file.");
+
+    VERIFY (CXX_FILESYSTEM_NAMESPACE::exists(confFilePath) && CXX_FILESYSTEM_NAMESPACE::is_regular_file(confFilePath));
 
     // extract the working directory for the configuration path
-    const std::string workingDir = filesystem::path(confFilePath).parent_path().native();    
-    if(!filesystem::exists(confFilePath))
-      throw std::runtime_error("Directory \"" + workingDir + "\" does not exist.");
+    const string workingDir = CXX_FILESYSTEM_NAMESPACE::path(confFilePath).parent_path().string();
+    VERIFY (CXX_FILESYSTEM_NAMESPACE::exists(workingDir));
 
     // read the configuration file and call the matching process
     std::string line;
     std::ifstream confFile;
     confFile.open(confFilePath);
-    if(!confFile.is_open())
-      throw std::runtime_error("Could not open config file.");
+    VERIFY (confFile.is_open());
 
     int read_point_clouds = 0;
     while ( getline (confFile,line) && read_point_clouds < max_num_point_clouds)
@@ -114,9 +124,8 @@ void extractPCAndTrFromStandfordConfFile(
         
         if (tokens.size() == 9){
             if (tokens[0].compare("bmesh") == 0){
-                std::string inputfile = filesystem::path(confFilePath).parent_path().string()+string("/")+tokens[1];
-                if(!(filesystem::exists(inputfile) && filesystem::is_regular_file(inputfile)))
-                  throw std::runtime_error("File \"" + inputfile + "\" does not exist or is no regular file.");
+                string inputfile = CXX_FILESYSTEM_NAMESPACE::path(confFilePath).parent_path().string()+string("/")+tokens[1];
+                VERIFY(CXX_FILESYSTEM_NAMESPACE::exists(inputfile) && CXX_FILESYSTEM_NAMESPACE::is_regular_file(inputfile));
 
                 // build the Eigen rotation matrix from the rotation and translation stored in the files
                 Eigen::Matrix<double, 3, 1> tr (
@@ -157,8 +166,7 @@ void extractPCAndTrFromStandfordConfFile(
     IOManager iomanager;
     for(int i = 0; i < num_point_clouds; i++){
         const string& file = files[i];
-         if(!iomanager.ReadObject((char *)file.c_str(), point_clouds[i], tex_coords, normals, tris, mtls) )
-            throw std::runtime_error("Couldn't read ply file \"" + file + "\"");
+         VERIFY(iomanager.ReadObject((char *)file.c_str(), point_clouds[i], tex_coords, normals, tris, mtls) );
     }
 }
 
