@@ -95,6 +95,10 @@ if(OpenGR_USE_CHEALPIX)
     target_link_libraries(pair_extraction ${Chealpix_LIBS} )
 endif(OpenGR_USE_CHEALPIX)
 
+if(MSVC)
+     target_compile_options(pair_extraction PRIVATE /bigobj)
+ endif(MSVC)
+
 #############################################
 ## quad extraction
 #set(quad_extraction_SRCS
@@ -133,6 +137,9 @@ if (CXX_FILESYSTEM_HAVE_FS)
     if(OpenGR_USE_CHEALPIX)
         target_link_libraries(matching ${Chealpix_LIBS} )
     endif(OpenGR_USE_CHEALPIX)
+    if(MSVC)
+        target_compile_options(matching PRIVATE /bigobj)
+    endif(MSVC)
 endif (CXX_FILESYSTEM_HAVE_FS)
 
 #############################################
@@ -157,6 +164,9 @@ if (CXX_FILESYSTEM_HAVE_FS)
     if(OpenGR_USE_CHEALPIX)
         target_link_libraries(matching3pcs ${Chealpix_LIBS} )
     endif(OpenGR_USE_CHEALPIX)
+    if(MSVC)
+        target_compile_options(matching3pcs PRIVATE /bigobj)
+    endif(MSVC)
 
 
     #############################################
@@ -172,6 +182,9 @@ if (CXX_FILESYSTEM_HAVE_FS)
         target_compile_definitions(test_io PUBLIC -DCXX_FILESYSTEM_HAVE_FS -DCXX_FILESYSTEM_IS_EXPERIMENTAL=$<BOOL:${CXX_FILESYSTEM_IS_EXPERIMENTAL}> -DCXX_FILESYSTEM_NAMESPACE=${CXX_FILESYSTEM_NAMESPACE})
         add_dependencies(test_io dataset-standford-bunny)
         add_dependencies(buildtests test_io)
+        if(MSVC)
+            target_compile_options(test_io PRIVATE /bigobj)
+        endif(MSVC)
     endif (OpenGR_COMPILE_APPS)
 endif (CXX_FILESYSTEM_HAVE_FS)
 

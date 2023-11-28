@@ -12,4 +12,7 @@ set(Demo_ExtPointBinding_SRC
 add_executable(${PROJECT_NAME} ${Demo_ExtPointBinding_SRC})
 target_link_libraries(${PROJECT_NAME} gr::utils gr::accel gr::algo gr::io ${OpenGRAppsDeps})
 add_dependencies(${PROJECT_NAME} opengr)
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /bigobj)
+endif(MSVC)
 install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin  )

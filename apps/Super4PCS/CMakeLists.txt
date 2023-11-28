@@ -6,5 +6,8 @@ set(Demo_Super4PCS_SRC
 
 add_executable(${PROJECT_NAME} ${Demo_Super4PCS_SRC})
 target_link_libraries(${PROJECT_NAME} gr::utils gr::accel gr::algo gr::io ${OpenGRAppsDeps})
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /bigobj)
+endif(MSVC)
 add_dependencies(${PROJECT_NAME} opengr)
 install( TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin  )
