@@ -151,7 +151,7 @@ CongruentSetExplorationBase<Traits, PointType, TransformVisitor, PairFilteringFu
   v(0, best_LCP_, transformation);
 
   bool ok = false;
-  std::chrono::time_point<system_clock> t0 = system_clock::now(), end;
+  std::chrono::time_point<system_clock> t0 = system_clock::now();
   for (int i = current_trial_; i < current_trial_ + n; ++i) {
     ok = TryOneBase(v);
 

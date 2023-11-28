@@ -220,7 +220,7 @@ inline void
 OneRingNeighborhood::get<1> (
      int queryId,
      int nElPerDim,
-     int offset,
+     int /*offset*/,
      typename NeighborhoodType<1>::ptr first,
      typename NeighborhoodType<1>::ptr last)
 {
