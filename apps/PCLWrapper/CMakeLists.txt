@@ -14,6 +14,9 @@ if( PCL_FOUND )
   add_executable(${PROJECT_NAME} ${Demo_PCL_SRC} ${Demo_PCL_headers})
   target_link_libraries(${PROJECT_NAME} gr::algo gr::utils gr::accel ${PCL_LIBRARIES} ${OpenGRAppsDeps})
   add_dependencies(${PROJECT_NAME} opengr)
+  if(MSVC)
+      target_compile_options(${PROJECT_NAME} PRIVATE /bigobj)
+  endif(MSVC)
 
   # [C/C++]>[General]>[Additional Include Directories]
   include_directories( ${PCL_INCLUDE_DIRS} )
