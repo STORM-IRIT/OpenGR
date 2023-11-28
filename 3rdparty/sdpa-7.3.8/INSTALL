@@ -1,0 +1,396 @@
+
+SDPA 7.3.X Install Manual
+
+[Copyright (C) 2004-2012 SDPA Project]
+
+This text explains how to install SDPA.
+If you have questions on the installation,
+please contact us from
+http://sdpa.sourceforge.net/contact.html
+
+The user-manual of SDPA is available at
+https://sourceforge.net/projects/sdpa/files/sdpa/sdpa.7.1.1.manual.20080618.pdf/download
+
+--- index ------------------------------------
+
+1. Install the SDPA
+2. Compile callable-library example         [optional]
+3. Compile SDPA-M (for Matlab and Octave)   [optional]
+   including short manual for SDPA-M
+4. Note for Mac OS X
+5. Note for existing MUMPS package (for Ubuntu/Debian)
+6. If you have some trouble
+
+----------------------------------------------
+
+
+1. Install the SDPA
+
+(1) Download the SDPA from the SDPA Homepage;
+
+http://sdpa.sourceforge.net/download.html
+
+You can get the sdpa_7.3.X.tar.gz
+
+
+(2) configure && make
+
+You can select BLAS library from the three, OpenBLAS, ATLAS,  and
+LAPACK/BLAS. The selection of BLAS library sometimes strongly affects
+the performance of SDPA. From our numerical experiments, GotoBLAS
+attains best performance. If you are allowed to use GotoBLAS (for the
+details, refer the GotoBLAS license), our suggestion is GotoBLAS. The
+LAPACK/BLAS is only for the case both ATLAS and Goto BLAS can not be
+compiled.
+
+If you install SDPA into **Mac OS X**, then first take a
+look this section before your compile. Then, you should read 
+Section 4 ``Note for Mac OS X'' and return here.
+
+(2-1) SDPA linked against GotoBLAS library
+
+Assume that SDPA is installed into $HOME/sdpa/.
+
+# OpenBLAS
+$ mkdir -p $HOME/sdpa
+$ git clone https://github.com/xianyi/OpenBLAS.git
+$ cd OpenBLAS
+
+Depending on OS bit (64 or 32),
+$ make BINARY=64 CC=gcc FC=gfortran USE_OPENMP=0 NO_CBLAS=1 NO_WARMUP=1 libs netlib;
+or
+$ make BINARY=32 CC=gcc FC=gfortran USE_OPENMP=0 NO_CBLAS=1 NO_WARMUP=1 libs netlib;
+[If you are going to use mex files on Mac OS X 
+ with Matlab 2009a or earlier, we suggest 
+ you use 32bit (because Matlab 2009a on Mac OS X
+ is 32bit)]
+
+# SDPA
+$ cd $HOME/sdpa 
+$ tar xzf sdpa_7.3.X.tar.gz
+$ cd sdpa-7.3.X
+$ export CC=gcc
+$ export CXX=g++
+$ export FC=gfortran
+$ export CFLAGS="-funroll-all-loops"
+$ export CXXFLAGS="-funroll-all-loops"
+$ export FFLAGS="-funroll-all-loops"
+$ ./configure --prefix=$HOME/sdpa --with-blas="${HOME}/sdpa/OpenBLAS/libopenblas.a" --with-lapack="${HOME}/sdpa/OpenBLAS/libopenblas.a" 
+$ make
+$ make install
+
+(2-2) SDPA linked against ATLAS library
+
+Download the ATLAS library from the following web site;
+
+http://math-atlas.sourceforge.net/
+
+Download the LAPACK library from the following web site;
+
+http://www.netlib.org/lapack/
+
+Assume that SDPA and ATLAS/LAPACK library are installed into $HOME/sdpa/sdpa_7.3.X and $HOME/sdpa/lib respectively.
+
+# LAPACK
+$ tar xvzf lapack.tgz
+$ cd lapack-3.3.0
+$ cp ./INSTALL/make.inc.gfortran make.inc
+$ make lapacklib OPTS="-O2 -fPIC" NOOPT="-O0 -fPIC"
+$ cp lapack_LINUX.a $HOME/sdpa/lib/liblapack.a
+
+# ATLAS
+$ cd $HOME/sdpa
+$ tar xvzf atlas3.x.x.tar.gz
+$ mkdir -p $HOME/sdpa/atlas-tmp
+$ cd $HOME/sdpa/atlas-tmp
+$ ../ATLAS/configure --prefix=$HOME/sdpa/atlas \
+  -Si cputhrchk 0 \
+  --with-netlib-lapack=$HOME/sdpa/lib/liblapack.a \
+  -C ic gcc -C if gfortran -Fa alg -fPIC
+
+  If your OS is 64bit, you should configure exlicitly by
+  adding '-b 64' as follows.
+$ ../ATLAS/configure --prefix=$HOME/sdpa/atlas \
+  -Si cputhrchk 0 \
+  --with-netlib-lapack=$HOME/sdpa/lib/liblapack.a \
+  -C ic gcc -C if gfortran -Fa alg -fPIC -b 64
+
+$ make
+$ make install
+$ rm -rf $HOME/sdpa/atlas-tmp
+
+Note:
+   On Mac OS X, 'make' or 'make install'
+   of ATLAS sometimes fail. In this case,
+   copy from the build directory as follow
+
+   $ cp $HOME/sdpa/atlas-tmp/lib/lib*.a $HOME/sdpa/atlas/lib/ 
+
+# SDPA
+$ cd $HOME/sdpa 
+$ tar xzf sdpa_7.3.X.tar.gz
+$ cd sdpa-7.3.X
+$ export CC=gcc
+$ export CXX=g++
+$ export FC=gfortran
+$ export CFLAGS="-funroll-all-loops"
+$ export CXXFLAGS="-funroll-all-loops"
+$ export FFLAGS="-funroll-all-loops"
+
+$ ./configure --prefix=$HOME/sdpa --with-blas="-L${HOME}/sdpa/atlas/lib -lptf77blas -lptcblas -latlas" --with-lapack="-L${HOME}/sdpa/lib -llapack"
+
+Note:
+   If your OS is Mac OS X, assign the full paths,
+   $ ./configure --prefix=$HOME/sdpa --with-blas="${HOME}/sdpa/atlas/lib/libptf77blas.a ${HOME}/sdpa/atlas/lib/libatlas.a" --with-lapack="${HOME}/sdpa/lib/liblapack.a"
+
+$ make
+$ make install
+
+(2-3) SDPA linked against LAPACK/BLAS library
+
+Download the LAPACK/BLAS library from the following web site;
+
+http://www.netlib.org/lapack/
+
+Assume that SDPA and LAPACK/BLAS library are installed into $HOME/sdpa/sdpa_7.3.X and $HOME/sdpa/lib respectively.
+
+# LAPACK/BLAS
+$ tar xvzf lapack.tgz
+$ cd lapack-3.3.0
+$ make blaslib OPTS="-O2 -fPIC" NOOPT="-O0 -fPIC"
+$ make lapacklib OPTS="-O2 -fPIC" NOOPT="-O0 -fPIC"
+$ cp blas_LINUX.a $HOME/sdpa/lib/libblas.a
+$ cp lapack_LINUX.a $HOME/sdpa/lib/liblapack.a
+
+# SDPA
+$ cd $HOME/sdpa 
+$ tar xzf sdpa_7.3.X.tar.gz
+$ cd sdpa-7.3.X
+$ export CC=gcc
+$ export CXX=g++
+$ export FC=gfortran
+$ export CFLAGS="-funroll-all-loops"
+$ export CXXFLAGS="-funroll-all-loops"
+$ export FFLAGS="-funroll-all-loops"
+$ ./configure --with-blas="-L${HOME}/sdpa/lib -lblas" --with-lapack="-L${HOME}/sdpa/lib -llapack"
+$ make
+$ make install
+
+(3) execute
+Try the following command to execute sdpa
+   $ cd $HOME/sdpa/bin/
+   $ ./sdpa
+Then you will see message from SDPA and can check command line options.
+To solve input dat-s and write its result,
+   $ ./sdpa $HOME/sdpa/share/sdpa/example/example1.dat-s example1.result
+
+If you specify the number of threads with the SDPA,
+set OMP_NUM_THREADS environment variable(ex. export OMP_NUM_THREADS=4).
+If you have dual-core or quad-core CPU, we strongly recommend that set 
+
+$ export OMP_NUM_THREADS=2
+or
+$ export OMP_NUM_THREADS=4
+
+
+The details of the configure script option for each OS
+can be found in sdpa user manual.
+(https://sourceforge.net/projects/sdpa/files/sdpa/sdpa.7.1.1.manual.20080618.pdf/download)
+
+
+----------------------------------------------    
+2. Compile callable-library example (optional)
+
+To compile callable-library example, use 'make' command 
+in 'libexample' directory
+   $ cd $HOME/sdpa/share/sdpa/libexample
+   $ make
+
+The details of callable-library can be found in 
+SDPA user manual in $HOME/sdpa/share/sdpa/
+
+----------------------------------------------    
+3. Compile SDPA-M (optional)
+
+To compile SDPA-M, use 'make' command 
+in 'mex' directory
+   $ cd $HOME/sdpa/share/sdpa/mex
+   $ make 
+
+If you use Octave instead of Matlab, then
+   $ cd $HOME/sdpa/share/sdpa/mex
+   $ make COMPILE_ENVIRONMENT=octave
+
+The make command automatically searches 'mex' command 
+by invoking 'matlab' command. If this auto-search fails,
+you setup the full-path for 'mex' command in Makefile
+in the 'mex' directory and use 'make' command again.
+
+Since the usage of this new SDPA-M as SDPA-M 6.2.0,
+SDPA-M 6.2.0 manual is very useful.
+(https://sourceforge.net/projects/sdpa/files/sdpa-m/sdpamManual.pdf/download)
+In addition, the file 'mex/CommandList.txt' summarizes
+each command.
+
+	
+When you have trouble with SDPA-M(Matlab environment),
+the following command will display useful messages.
+
+$ matlab -Dgdb
+[On gdb environment]
+(gdb) run -nodisplay
+[On Matlab environment]
+>> (Call SDPA-M by sdpam or sedumiwrap)
+If Matlab aborts, try the following command in gdb environment.
+(gdb) where
+The command 'where' will display what happened.
+To exit gdb environment,
+(gdb) quit
+
+In some case, the segmentation fault may be avoided by
+$ export LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/4.4/libgfortran.so:$LD_PRELOAD
+$ export LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/4.4/libstdc++.so:$LD_PRELOAD
+$ export LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/4.4/libgcc_s.so:$LD_PRELOAD
+$ matlab
+In particular, when the gcc version is higher than the version Matlab
+assumes, Matlab sometimes can not load appropriate shared libraries.
+The command above load the libraries before Matlab launches.
+
+----------------------------------------------    
+4. Note for Mac OS X
+
+Since the installation of SDPA requires gfortran, 
+we recommend the users install 'fink' system, 
+which is a package manager for Mac OS X.
+(You need an administrator authority for your system).
+
+To install fink system, please refer 
+http://www.finkproject.org/
+and
+http://www.finkproject.org/download/index.php?phpLang=en
+
+In particular, the following URLs are useful when 
+you have trouble with fink.
+http://www.finkproject.org/faq/upgrade-fink.php?phpLang=en
+http://www.finkproject.org/faq/index.php?phpLang=en
+
+(1-1)  SDPA linked against ATLAS library
+
+Install atlas by the fink system. 
+(You can install atlas by following Section 1 above;
+but the installation by the fink system is easier.)
+
+$ sudo fink install atlas
+
+The atlas package in the fink system also contains
+lapack library. If your system does not have gcc-4
+or gfortran, the fink system automatically installs
+them before compiling the atlas package.
+
+You can check whether your system successfully installed 
+gcc-4 and atlas by the following command.
+
+[To check gcc-4]
+$ /sw/bin/gcc-4 -v
+$ /sw/bin/g++-4 -v
+$ /sw/bin/gfortran -v
+
+[To check atlas]
+$ ls -l /sw/lib/libptf77blas.a
+$ ls -l /sw/lib/libptcblas.a
+$ ls -l /sw/lib/libatlas.a
+$ ls -l /sw/lib/liblapack.a
+
+To install SDPA, download the SDPA from the SDPA Homepage;
+http://sdpa.sourceforge.net/download.html
+You can get the sdpa_7.3.X.tar.gz
+
+Then the following commands will install SDPA.
+
+$ mkdir $HOME/sdpa
+$ cd $HOME/sdpa 
+$ tar xzf sdpa_7.3.X.tar.gz
+$ cd sdpa-7.3.X
+$ export CC=/sw/bin/gcc-4
+$ export CXX=/sw/bin/g++-4
+$ export FC=/sw/bin/gfortran
+$ export CFLAGS="-funroll-all-loops"
+$ export CXXFLAGS="-funroll-all-loops"
+$ export FFLAGS="-funroll-all-loops"
+$ ./configure --prefix=$HOME/sdpa --with-blas="/sw/lib/libptf77blas.a /sw/lib/libptcblas.a /sw/lib/libatlas.a" --with-lapack="/sw/lib/liblapack.a"
+$ make
+$ make install
+
+(1-2) SDPA linked against GotoBLAS library or LAPACK/BLAS library
+
+In these cases, instead of installing atlas, you need to 
+install gfortran into Mac OS X. You can install gfortran 
+by the following command:
+
+$ fink install gcc43
+
+After installing gfortran, go back to (2-2) of Section 2. 
+(Even if you have already installed LAPACK into your computer 
+by using fink system, it is inappropriate to link with GotoBLAS
+(since the LAPACK of the fink system has some ATLAS interface)
+and you need to install LAPACK by following (2-2) of Section 2.)
+
+(1-3) compile callable-library example and SDPA-M in Mac OS X
+
+To use callable library and SDPA-M,
+after using make install, you need to modify
+etc/make.inc to remove "-lcrt1.10.5"
+(due to a confliction between Mac OS X and Matlab).
+
+$ cd $HOME/sdpa/sdpa-7.3.X/etc
+$ sed -e 's/-lcrt1.10.5.o//g' -i .bak make.inc
+
+Then
+
+$ cd $HOME/sdpa/share/sdpa/libexample
+$ make
+$ cd $HOME/sdpa/share/sdpa/mex
+$ make
+
+Sometimes 'make' command in the 'mex' directory fails,
+since Matlab directory may depend on your environment.
+In the case, modify 'Makefile' in the 'mex' directory
+from 
+    MEX = /Applications/MATLAB_R2008b.app/bin/mex
+to (for example)
+    MEX = /Applications/MATLAB_R2007b/bin/mex
+and use 'make' command again.
+
+In addition, some warning may be displayed due to
+a confliction between Mac OS X and Matlab.
+
+-------------------------------------------------------
+5. Note for existing MUMPS package (for Ubuntu/Debian)
+
+On Ubuntu/Debian, you can install a MUMPS package by
+$ sudo aptitude install libmumps-seq-dev
+If you have alredy a MUMPS package, you can use it
+by assiging it to configure script.
+
+For example, on Debian, the header file is 
+'/usr/include/dmumps_c.h' and the library file is
+'/usr/lib/libdmumps_seq.a'.
+In this case
+$ ./configure --prefix=$HOME/sdpa \
+--with-blas=SOME_BLAS --with-lapack=SOME_LAPACK \
+--with-mumps-include="-I/usr/include" \
+--with-mumps-libs="-L/usr/lib -ldmumps_seq"
+Then
+$ make
+$ make install
+
+-------------------------------------------------------
+6. If you have some trouble
+
+If some bugs are found or you encounter some trouble
+when you are compiling SDPA, please let us know from
+http://sdpa.sourceforge.net/contact.html
+
+In particular, attaching error messages and/or 'config.log' file
+is very useful to let us understand your situation.
+

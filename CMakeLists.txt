@@ -14,6 +14,13 @@ OPTION (ENABLE_TIMING "Enable computation time recording" FALSE)
 OPTION (OpenGR_USE_CHEALPIX "Use Chealpix for orientation filtering (deprecated)" FALSE)
 OPTION (DL_DATASETS "Download demo datasets and associated run scripts" FALSE)
 OPTION (OpenGR_USE_WEIGHTED_LCP "Use gaussian weights for point samples when computing LCP" FALSE)
+OPTION (OpenGR_USE_EXPERIMENTAL_FEATURES "Enable experimental features" FALSE)
+
+if(OpenGR_USE_EXPERIMENTAL_FEATURES)
+    OPTION (OpenGR_USE_SDPA "Use SDPA solvers (used for N-Ary registration only)" FALSE)
+    OPTION (OpenGR_USE_MOSEK "Use MOSEK solvers (used for N-Ary registration only)" FALSE)
+    message (STATUS "Enabling Experimental Features")
+endif(OpenGR_USE_EXPERIMENTAL_FEATURES)
 
 ################################################################################
 ## DO NOT EDIT AFTER THIS LINE
@@ -93,6 +100,56 @@ if(OpenGR_USE_CHEALPIX)
     message(WARNING "Chealpix support is deprecated")
 endif(OpenGR_USE_CHEALPIX)
 
+if(OpenGR_USE_SDPA)
+    if(NOT SDPA_ROOT_DIR)
+        # Locate packaged version
+        set(SDPA_ROOT_DIR "${THIRDPARTY_DIR}/sdpa-7.3.8" CACHE PATH "SDPA root directory.")
+
+        enable_language (Fortran)
+        if(NOT DEFINED ENV{FC})
+            set(ENV{FC} "${CMAKE_Fortran_COMPILER} -fallow-argument-mismatch")
+            set(FC_HAS_BEEN_SET)
+        endif()
+
+        message(STATUS "Compile packaged version of SDPA")
+        execute_process(
+                COMMAND ./configure --disable-dependency-tracking
+                WORKING_DIRECTORY ${SDPA_ROOT_DIR}
+                RESULT_VARIABLE SDPA_CONFIGURE_OUTPUT)
+        if(FC_HAS_BEEN_SET)
+            unset(ENV{FC})
+        endif()
+        if (${SDPA_CONFIGURE_OUTPUT} STREQUAL "0")
+            message(STATUS "SDPA Configuration terminated")
+            message(STATUS "Compile packaged version of SDPA")
+
+
+            execute_process(
+                    COMMAND make
+                    WORKING_DIRECTORY ${SDPA_ROOT_DIR}
+                    RESULT_VARIABLE SDPA_COMPILE_OUTPUT)
+
+            if (${SDPA_COMPILE_OUTPUT} STREQUAL "0")
+                message(STATUS "SDPA Compilation terminated")
+                set(HAVE_SDPA_COMPILATION_TARGET)
+            else()
+                unset(SDPA_ROOT_DIR CACHE)
+                message(FATAL_ERROR "SDPA Compilation failed with error: ${SDPA_COMPILE_OUTPUT}")
+            endif()
+
+        else()
+            unset(SDPA_ROOT_DIR CACHE)
+            message(FATAL_ERROR "SDPA Configuration failed with error: ${SDPA_CONFIGURE_OUTPUT}")
+        endif()
+    endif()
+
+    find_package(SDPA REQUIRED)
+endif(OpenGR_USE_SDPA)
+
+if(OpenGR_USE_MOSEK)
+    find_package(MOSEK REQUIRED)
+endif(OpenGR_USE_MOSEK)
+
 ## Eigen: automatic configuration:
 ##  1. if EIGEN3_INCLUDE_DIR is set, use it directly
 ##  2. if any, and version >= 3.3.x, use system version
@@ -142,6 +199,11 @@ add_custom_target(opengr DEPENDS utils accel algo )
 if(OpenGR_USE_CHEALPIX)
     add_dependencies(opengr chealpix)
 endif(OpenGR_USE_CHEALPIX)
+
+if(HAVE_SDPA_COMPILATION_TARGET)
+    add_dependencies(gr::accel opengr_deps_compile_sdpa)
+    add_dependencies(gr::algo opengr_deps_compile_sdpa)
+endif(HAVE_SDPA_COMPILATION_TARGET)
 
 ################################################################################
 ## Demos, tests, assets and scripts
@@ -309,5 +371,10 @@ install(DIRECTORY ${SRC_DIR}/
 #   * <prefix>/lib/cmake/Foo/FooConfigVersion.cmake
 install(
     FILES "${project_config}" "${version_config}"
+    DESTINATION "${config_install_dir}"
+)
+
+install(
+    FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindSDPA.cmake"
     DESTINATION "${config_install_dir}"
 )

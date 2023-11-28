@@ -81,6 +81,42 @@ add_test(NAME externalAppTest
          COMMAND OpenGR-externalAppTest)
 
 #############################################
+## gret-sdp
+
+if(OpenGR_USE_EXPERIMENTAL_FEATURES)
+
+    set(gret-sdp_SRCS gret-sdp.cc)
+
+    add_executable(gret-sdp ${gret-sdp_SRCS} ${testing_SRCS})
+    add_dependencies(buildtests gret-sdp)
+    message(STATUS "[Tests] Adding gret-sdp to testing set")
+    set (gret-sdp_subtests 0 1)
+    foreach(subtest_id ${gret-sdp_subtests})
+        add_test(NAME "gret-sdp_${subtest_id}"
+                #CONFIGURATIONS Release
+                COMMAND gret-sdp ${subtest_id})
+        set_tests_properties ( "gret-sdp_${subtest_id}" PROPERTIES TIMEOUT 600) # in seconds
+    endforeach()
+    target_link_libraries(gret-sdp gr::accel gr::algo gr::utils gr::io ${OpenGRTestsDeps} std::filesystem)
+    target_compile_definitions(gret-sdp PUBLIC -DCXX_FILESYSTEM_HAVE_FS -DCXX_FILESYSTEM_IS_EXPERIMENTAL=$<BOOL:${CXX_FILESYSTEM_IS_EXPERIMENTAL}> -DCXX_FILESYSTEM_NAMESPACE=${CXX_FILESYSTEM_NAMESPACE})
+    add_dependencies(gret-sdp dataset-standford-armadillo dataset-standford-bunny)
+
+    if(OpenGR_USE_SDPA)
+        find_package( SDPA )
+        target_link_libraries(gret-sdp ${SDPA_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${SDPA_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_SDPA)
+    endif(OpenGR_USE_SDPA)
+
+    if(OpenGR_USE_MOSEK)
+        find_package( MOSEK )
+        target_link_libraries(gret-sdp ${MOSEK_LIBRARIES})
+        target_include_directories(gret-sdp PRIVATE ${MOSEK_INCLUDE_DIRS})
+        target_compile_definitions(gret-sdp PRIVATE OpenGR_USE_MOSEK)
+    endif(OpenGR_USE_MOSEK)
+endif (OpenGR_USE_EXPERIMENTAL_FEATURES)
+
+#############################################
 ## pair extraction
 set(pair_extraction_SRCS
     pair_extraction.cc

@@ -50,7 +50,7 @@
 #endif
 
 #include "gr/utils/shared.h"
-#include "gr/algorithms/matchBase.h"
+#include "gr/algorithms/PairwiseMatchBase.h"
 #include "gr/utils/registrationMetrics.h"
 
 #ifdef TEST_GLOBAL_TIMINGS
@@ -92,7 +92,7 @@ template <typename _Traits,
           typename _TransformVisitor,
           typename _PairFilteringFunctor, /// <\brief Must implements PairFilterConcept
           template < class, class > class ... OptExts >
-class CongruentSetExplorationBase : public MatchBase<_PointType, _TransformVisitor, OptExts ..., CongruentSetExplorationOptions> {
+class CongruentSetExplorationBase : public PairwiseMatchBase<_PointType, _TransformVisitor, OptExts ..., CongruentSetExplorationOptions> {
 
 public:
     using Traits = _Traits;
@@ -102,7 +102,7 @@ public:
     using Coordinates = typename Traits::Coordinates;
     using PairFilteringFunctor = _PairFilteringFunctor;
 
-    using MatchBaseType = MatchBase<_PointType, _TransformVisitor, OptExts ..., CongruentSetExplorationOptions>;
+    using MatchBaseType = PairwiseMatchBase<_PointType, _TransformVisitor, OptExts ..., CongruentSetExplorationOptions>;
     using PosMutablePoint = typename MatchBaseType::PosMutablePoint;
     using OptionsType = typename MatchBaseType::OptionsType;
 

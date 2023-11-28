@@ -19,10 +19,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { name: "Windows MSVC", os: windows-latest, cc: "cl.exe", cxx: "cl.exe", chealpix: "OFF", icon: "Windows"}
-          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++", chealpix: "OFF", icon: "Linux" }
-          - { name: "Ubuntu clang", os: ubuntu-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", icon: "Linux" }
-          - { name: "MacOS clang", os: macos-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", icon: "Apple" }
+          - { name: "Windows MSVC", os: windows-latest, cc: "cl.exe", cxx: "cl.exe", chealpix: "OFF", exp: "OFF", icon: "Windows"}
+          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++", chealpix: "OFF", exp: "OFF", icon: "Linux" }
+          - { name: "Ubuntu clang", os: ubuntu-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", exp: "OFF", icon: "Linux" }
+          - { name: "MacOS clang", os: macos-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", exp: "OFF", icon: "Apple" }
+
+          - { name: "Windows MSVC (experimental)", os: windows-latest, cc: "cl.exe", cxx: "cl.exe", chealpix: "OFF", exp: "ON", icon: "Windows" }
+          - { name: "Ubuntu gcc (experimental)", os: ubuntu-latest, cc: "gcc", cxx: "g++", chealpix: "OFF", exp: "ON", icon: "Linux" }
+          - { name: "Ubuntu clang (experimental)", os: ubuntu-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", exp: "ON", icon: "Linux" }
+          - { name: "MacOS clang (experimental)", os: macos-latest, cc: "clang", cxx: "clang++", chealpix: "OFF", exp: "ON", icon: "Apple" }
 
           # Testing for Healpix. Deprecated, will be removed without notice. Unsupported OS are disabled.
           # - { name: "Windows MSVC Chealpix", os: windows-latest, cc: "cl.exe", cxx: "cl.exe", chealpix: "ON", icon: "Windows"}
@@ -49,7 +54,7 @@ jobs:
       - name: Configure OpenGR
         run: |
           cd build/opengr
-          cmake ../../src/opengr -GNinja -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../install/ -DOpenGR_COMPILE_TESTS=TRUE -DENABLE_TIMING=FALSE -DOpenGR_USE_CHEALPIX=${{ matrix.config.chealpix }} -DDL_DATASETS=FALSE
+          cmake ../../src/opengr -GNinja -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../install/ -DOpenGR_COMPILE_TESTS=TRUE -DENABLE_TIMING=FALSE -DOpenGR_USE_CHEALPIX=${{ matrix.config.chealpix }} -DOpenGR_USE_EXPERIMENTAL_FEATURES=${{ matrix.config.exp }} -DOpenGR_USE_SDPA=${{ matrix.config.exp }} -DDL_DATASETS=FALSE
       - name: Build OpenGR
         run: |
           cd build/opengr

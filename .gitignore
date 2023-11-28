@@ -3,3 +3,4 @@
 assets/demo*
 .vscode/*
 *.orig
+3rdparty/SDPA

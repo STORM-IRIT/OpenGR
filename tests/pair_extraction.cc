@@ -48,7 +48,7 @@
 // source code and datasets are available for research use at
 // http://geometry.cs.ucl.ac.uk/projects/2014/super4PCS/.
 
-#include "gr/algorithms/matchBase.h"
+#include "gr/algorithms/PairwiseMatchBase.h"
 #include "gr/algorithms/match4pcsBase.h"
 #include "gr/algorithms/Functor4pcs.h"
 #include "gr/algorithms/FunctorSuper4pcs.h"
